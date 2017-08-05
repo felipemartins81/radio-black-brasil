@@ -21,8 +21,11 @@
     <ion-grid>
       <ion-row>
         <ion-col col-4>col</ion-col>
-        <ion-col col-4>
-          <a (click)="smTogglePlayPause()">{{ smIsPlaying ? 'pause' : 'play' }}</a>
+        <ion-col col-4 class="txt-center">
+          <a (click)="smTogglePlayPause()">
+            <i class="fa fa-{{ smIsPlaying ? 'pause' : 'play' }}-circle fa-4x"></i>
+          </a>
+          <!-- <i class="fa fa-circle"></i> -->
         </ion-col>
         <ion-col col-4>col</ion-col>
       </ion-row>
