@@ -1,28 +1,36 @@
 
+'use strict';
+
 var smCounter = 0,
     smTrackList = [],
-    smTrackStr = 'track_'
+    smTrackStr = 'track_',
     smPlayer = {};
 
-soundManager.setup({
-  // url: '/path/to/swf-files/',
-  // flashVersion: 9, // optional: shiny features (default = 8)
-  // preferFlash: false, 
-
-  onready: function() {
-    createSound();
-    // soundManager.play(smTrackStr + '0');
-  }
-});
-
-smPlayer.play = function(){
-  soundManager.play(smTrackStr + '0');
+/* -------------------------------------------------------------
+** smPlayer export functions
+*/
+smPlayer.play = function(_url){
+  if(_url)
+    soundManager.play(smTrackStr + '0');
+  else
+    soundManager.resumeAll();
 }
 
-function createSound () {
+smPlayer.pause = function(){
+  soundManager.pauseAll();
+}
+
+smPlayer.playTrackByUrl = function(_url){
+  createSound(_url);
+  smPlayer.play(_url);
+}
+/* 
+** ------------------------------------------------------------- */
+
+function createSound (_url) {
   soundManager.createSound({
     id: smTrackStr + smCounter,
-    url: getTrackUrl(),
+    url: _url ? _url : getTrackUrl(),
     autoLoad: true,
     autoPlay: false,
     onload: function() {
@@ -39,6 +47,17 @@ function getTrackUrl () {
 
   return smTrackList[ smCounter ];
 }
+
+// soundManager.setup({
+//   // url: '/path/to/swf-files/',
+//   // flashVersion: 9, // optional: shiny features (default = 8)
+//   // preferFlash: false, 
+
+//   onready: function() {
+//     // createSound(); 
+//     // soundManager.play(smTrackStr + '0');
+//   }
+// });
 
 
 // (function(window) {

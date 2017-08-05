@@ -16,15 +16,14 @@
 <!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
 <ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>
 
-<!-- http://radioblackbrasil.com/api/tracks/  -->
-
-
 <ion-footer>
   <ion-toolbar>
     <ion-grid>
       <ion-row>
         <ion-col col-4>col</ion-col>
-        <ion-col col-4> <a onclick="smPlayer.play()">play</a> </ion-col>
+        <ion-col col-4>
+          <a (click)="smTogglePlayPause()">{{ smIsPlaying ? 'pause' : 'play' }}</a>
+        </ion-col>
         <ion-col col-4>col</ion-col>
       </ion-row>
     </ion-grid>
