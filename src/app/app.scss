@@ -15,7 +15,15 @@
 // automatically applied to the <body> element in the app.
 
 .txt-center { text-align: center }
+.txt-bold { font-weight: bold }
 
-.footer { 
-  p { color: #999 }
+.fa-pulse { animation: fa-spin .6s infinite steps(8); }
+
+.footer {
+  a { color: #777 }
+  p {
+    color: #ccc;
+    margin: 7px 0 0 15px;
+    &:first-child { font-size: 1.6rem }
+  }
 }

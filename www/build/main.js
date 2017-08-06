@@ -52,7 +52,7 @@ var HomePage = (function () {
 }());
 HomePage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-home',template:/*ion-inline-start:"/Users/marlenejej/Documents/Felipe/radio-black-brasil/radio-black-brasil/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <h3>Ionic Menu Starter</h3>\n\n  <p>\n    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will show you the way.\n  </p>\n\n  <button ion-button secondary menuToggle>Toggle Menu</button>\n  \n  <!-- <div class="sm2-bar-ui full-width fixed">\n\n    <div class="bd sm2-main-controls">\n\n      <div class="sm2-inline-texture"></div>\n      <div class="sm2-inline-gradient"></div>\n\n      <div class="sm2-inline-element sm2-button-element">\n        <div class="sm2-button-bd">\n          <a href="#play" class="sm2-inline-button sm2-icon-play-pause">Play / pause</a>\n        </div>\n      </div>\n\n      <div class="sm2-inline-element sm2-inline-status">\n        <div class="sm2-playlist">\n          <div class="sm2-playlist-target">\n            <noscript><p>JavaScript is required.</p></noscript>\n          </div>\n        </div>\n\n        <div class="sm2-progress">\n          <div class="sm2-row">\n            <div class="sm2-inline-time">0:00</div>\n            <div class="sm2-progress-bd">\n              <div class="sm2-progress-track">\n                <div class="sm2-progress-bar"></div>\n                <div class="sm2-progress-ball"><div class="icon-overlay"></div></div>\n              </div>\n            </div>\n            <div class="sm2-inline-duration">0:00</div>\n          </div>\n        </div>\n      </div>\n\n      <div class="sm2-inline-element sm2-button-element sm2-volume">\n        <div class="sm2-button-bd">\n          <span class="sm2-inline-button sm2-volume-control volume-shade"></span>\n          <a href="#volume" class="sm2-inline-button sm2-volume-control">volume</a>\n        </div>\n      </div>\n\n      <div class="sm2-inline-element sm2-button-element">\n        <div class="sm2-button-bd">\n          <a href="#prev" title="Previous" class="sm2-inline-button sm2-icon-previous">&lt; previous</a>\n        </div>\n      </div>\n\n      <div class="sm2-inline-element sm2-button-element">\n        <div class="sm2-button-bd">\n          <a href="#next" title="Next" class="sm2-inline-button sm2-icon-next">&gt; next</a>\n        </div>\n      </div>\n\n      <div class="sm2-inline-element sm2-button-element">\n        <div class="sm2-button-bd">\n          <a href="#repeat" title="Repeat playlist" class="sm2-inline-button sm2-icon-repeat">&infin; repeat</a>\n        </div>\n      </div>\n\n      <div class="sm2-inline-element sm2-button-element sm2-menu">\n        <div class="sm2-button-bd">\n          <a href="#menu" class="sm2-inline-button sm2-icon-menu">menu</a>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <div class="bd sm2-playlist-drawer sm2-element">\n\n    <div class="sm2-inline-texture">\n      <div class="sm2-box-shadow"></div>\n    </div>\n\n    <div class="sm2-playlist-wrapper">\n\n      <ul class="sm2-playlist-bd">\n\n        <li>\n          <div class="sm2-row">\n            <div class="sm2-col sm2-wide">\n              <a href="http://freshly-ground.com/data/audio/sm2/SonReal%20-%20LA%20%28Prod%20Chin%20Injetti%29.mp3"><b>SonReal</b> - LA<span class="label">Explicit</span></a>\n            </div>\n            <div class="sm2-col">\n              <a href="http://freshly-ground.com/data/audio/sm2/SonReal%20-%20LA%20%28Prod%20Chin%20Injetti%29.mp3" target="_blank" title="Download &quot;LA&quot;" class="sm2-icon sm2-music sm2-exclude">Download this track</a>\n            </div>\n          </div>\n        </li>\n\n        <li><a href="http://freshly-ground.com/data/audio/sm2/SonReal%20-%20Let%20Me%20%28Prod%202oolman%29.mp3"><b>SonReal</b> - Let Me <span class="label">Explicit</span></a></li>\n        <li><a href="http://freshly-ground.com/data/audio/sm2/SonReal%20-%20People%20Asking.mp3"><b>SonReal</b> - People Asking <span class="label">Explicit</span></a></li>\n        <li><a href="http://freshly-ground.com/data/audio/sm2/SonReal%20-%20Already%20There%20Remix%20ft.%20Rich%20Kidd%2C%20Saukrates.mp3"><b>SonReal</b> - Already There Remix ft. Rich Kidd, Saukrates <span class="label">Explicit</span></a></li>\n        <li><a href="http://freshly-ground.com/data/audio/sm2/The%20Fugitives%20-%20Graffiti%20Sex.mp3"><b>The Fugitives</b> - Graffiti Sex</a></li>\n        <li><a href="http://freshly-ground.com/data/audio/sm2/Adrian%20Glynn%20-%20Seven%20Or%20Eight%20Days.mp3"><b>Adrian Glynn</b> - Seven Or Eight Days</a></li>\n        <li><a href="http://freshly-ground.com/data/audio/sm2/SonReal%20-%20I%20Tried.mp3"><b>SonReal</b> - I Tried</a></li>\n        <li><a href="http://freshly-ground.com/data/audio/mpc/20060826%20-%20Armstrong.mp3">Armstrong Beat</a></li>\n        <li><a href="http://freshly-ground.com/data/audio/mpc/20090119%20-%20Untitled%20Groove.mp3">Untitled Groove</a></li>\n        <li><a href="http://freshly-ground.com/data/audio/sm2/birds-in-kauai-128kbps-aac-lc.mp4">Birds In Kaua\'i (AAC)</a></li>\n        <li><a href="http://freshly-ground.com/data/audio/sm2/20130320%20-%20Po%27ipu%20Beach%20Waves.ogg">Po\'ipu Beach Waves (OGG)</a></li>\n        <li><a href="http://freshly-ground.com/data/audio/sm2/bottle-pop.wav">A corked beer bottle (WAV)</a></li>\n        <li><a href="../../demo/_mp3/rain.mp3">Rain</a></li>\n\n      </ul>\n    </div>\n  </div> -->\n\n</ion-content>\n<!-- \n<ion-footer>\n  <ion-toolbar>\n    <ion-grid>\n      <ion-row>\n        <ion-col col-4>col</ion-col>\n        <ion-col col-4>col</ion-col>\n        <ion-col col-4>col</ion-col>\n      </ion-row>\n    </ion-grid>\n  </ion-toolbar>\n</ion-footer> -->'/*ion-inline-end:"/Users/marlenejej/Documents/Felipe/radio-black-brasil/radio-black-brasil/src/pages/home/home.html"*/
+        selector: 'page-home',template:/*ion-inline-start:"/Users/marlenejej/Documents/Felipe/radio-black-brasil/radio-black-brasil/src/pages/home/home.html"*/'<ion-header>\n   <ion-navbar>\n      <button ion-button menuToggle>\n         <ion-icon name="menu"></ion-icon>\n      </button>\n      <ion-title>Destaques</ion-title>\n   </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n   <ion-card>\n      <img src="img/nin-live.png"/>\n      <ion-card-content>\n         <ion-card-title>\n            Nine Inch Nails Live\n         </ion-card-title>\n         <p>\n            The most popular industrial group ever, and largely\n            responsible for bringing the music to a mass audience.\n         </p>\n      </ion-card-content>\n   </ion-card>\n</ion-content>'/*ion-inline-end:"/Users/marlenejej/Documents/Felipe/radio-black-brasil/radio-black-brasil/src/pages/home/home.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* NavController */]])
 ], HomePage);
@@ -168,18 +168,18 @@ var AppModule = (function () {
 AppModule = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_2__angular_core__["L" /* NgModule */])({
         declarations: [
-            __WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* MyApp */],
+            __WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* app */],
             __WEBPACK_IMPORTED_MODULE_5__pages_home_home__["a" /* HomePage */],
             __WEBPACK_IMPORTED_MODULE_6__pages_list_list__["a" /* ListPage */]
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
             __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* HttpModule */],
-            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["c" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* MyApp */]),
+            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["c" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* app */]),
         ],
         bootstrap: [__WEBPACK_IMPORTED_MODULE_3_ionic_angular__["a" /* IonicApp */]],
         entryComponents: [
-            __WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* MyApp */],
+            __WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* app */],
             __WEBPACK_IMPORTED_MODULE_5__pages_home_home__["a" /* HomePage */],
             __WEBPACK_IMPORTED_MODULE_6__pages_list_list__["a" /* ListPage */]
         ],
@@ -199,7 +199,7 @@ AppModule = __decorate([
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyApp; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return app; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(189);
@@ -226,18 +226,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-var MyApp = (function () {
-    function MyApp(platform, statusBar, splashScreen, http) {
+var app = (function () {
+    function app(platform, statusBar, splashScreen, http) {
         var _this = this;
         this.platform = platform;
         this.statusBar = statusBar;
         this.splashScreen = splashScreen;
         this.http = http;
         this.rootPage = __WEBPACK_IMPORTED_MODULE_4__pages_home_home__["a" /* HomePage */];
-        this.smIsPlaying = false;
+        this.smPlaying = false;
         this.smCounter = 0;
         this.smTrackStr = 'track_';
         this.smPlayerMode = 'info';
+        this.smWaiting = true;
         this.initializeApp();
         // menu itens
         this.pages = [
@@ -247,56 +248,69 @@ var MyApp = (function () {
         // get tracks api
         this.http.get('http://radioblackbrasil.com/api/tracks/').map(function (res) { return res.json(); }).subscribe(function (data) {
             _this.smTrackList = data.tracks;
-            console.log(_this.smTrackList[0]);
             _this.smCreateSound(_this.smTrackList[0].url, 'firstCall');
         }, function (error) { console.warn(';( error calling tracks service'); });
     }
     /* -------------------------------------------------------------
     ** player functions
     */
-    MyApp.prototype.smCreateSound = function (_url, _firstCall) {
-        soundManager.createSound({
-            id: this.smTrackStr + this.smCounter.toString(),
-            url: _url,
-            autoPlay: _firstCall ? true : false,
-            onload: function () {
-                if (_firstCall)
-                    soundManager.pauseAll();
-            }
-        });
+    app.prototype.smCreateSound = function (_url, _firstCall) {
+        var _this = this;
         this.smActualTrack = this.smTrackList[this.smCounter];
+        if (!this.smActualTrack.smTrackId) {
+            this.smWaiting = true;
+            this.smActualTrack.smTrackId = this.smTrackStr + this.smCounter.toString();
+            soundManager.createSound({
+                id: this.smActualTrack.smTrackId,
+                url: _url,
+                autoPlay: _firstCall ? true : false,
+                onload: function () {
+                    if (_firstCall)
+                        soundManager.pauseAll();
+                    setAfterCreate('onload');
+                }
+            });
+        }
+        var setAfterCreate = function (_type) {
+            switch (_type) {
+                case 'onload': _this.smWaiting = false;
+            }
+        };
     };
-    MyApp.prototype.smPlay = function (_pos) {
+    app.prototype.smPlay = function (_pos) {
         switch (_pos) {
             // play ot pause
             case 'self':
-                if (this.smIsPlaying) {
+                if (this.smPlaying) {
                     soundManager.pauseAll();
-                    this.smIsPlaying = false;
+                    this.smPlaying = false;
                 }
                 else {
                     soundManager.resumeAll();
-                    this.smIsPlaying = true;
+                    this.smPlaying = true;
                 }
                 break;
             // next or prev
             default:
-                this.smIsPlaying = true;
-                // stop actual
-                soundManager.stop(this.smTrackStr + this.smCounter.toString());
-                // go to nwxt or prev
-                if (_pos === 'next') {
-                    this.smCounter++;
-                }
                 if (_pos === 'prev') {
+                    if (this.smCounter === 0)
+                        return; // first
+                    soundManager.stop(this.smActualTrack.smTrackId);
                     this.smCounter--;
                 }
+                if (_pos === 'next') {
+                    if (this.smCounter === this.smTrackList.length - 1)
+                        return; // last
+                    soundManager.stop(this.smActualTrack.smTrackId);
+                    this.smCounter++;
+                }
                 this.smCreateSound(this.smTrackList[this.smCounter].url, null);
-                soundManager.play(this.smTrackStr + this.smCounter.toString());
+                soundManager.play(this.smActualTrack.smTrackId);
+                this.smPlaying = true;
                 break;
         }
     };
-    MyApp.prototype.smChangePlayerMode = function () {
+    app.prototype.smChangePlayerMode = function () {
         switch (this.smPlayerMode) {
             case 'controls':
                 this.smPlayerMode = 'info';
@@ -308,27 +322,27 @@ var MyApp = (function () {
     };
     /*
     ** ------------------------------------------------------------- */
-    MyApp.prototype.initializeApp = function () {
+    app.prototype.initializeApp = function () {
         var _this = this;
         this.platform.ready().then(function () {
             _this.statusBar.styleDefault();
             _this.splashScreen.hide();
         });
     };
-    MyApp.prototype.openPage = function (page) {
+    app.prototype.openPage = function (page) {
         this.nav.setRoot(page.component);
     };
-    return MyApp;
+    return app;
 }());
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_13" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* Nav */]),
     __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* Nav */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* Nav */]) === "function" && _a || Object)
-], MyApp.prototype, "nav", void 0);
-MyApp = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/Users/marlenejej/Documents/Felipe/radio-black-brasil/radio-black-brasil/src/app/app.html"*/'<ion-menu [content]="content">\n  <ion-header>\n    <ion-toolbar>\n      <ion-title>Menu</ion-title>\n    </ion-toolbar>\n  </ion-header>\n  <ion-content>\n    <ion-list>\n      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">\n        {{p.title}}\n      </button>\n    </ion-list>\n  </ion-content>\n</ion-menu>\n\n<!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>\n\n<ion-footer>\n  <ion-toolbar>\n    <ion-grid>\n      <ion-row>\n        <!-- prev -->\n        <ion-col *ngIf="smPlayerMode === \'controls\'" col-4 class="txt-center">\n          <a (click)="smPlay(\'prev\')">\n            <i class="fa fa-angle-left fa-4x"></i>\n          </a>\n        </ion-col>\n        <!-- play / pause -->\n        <ion-col col-2 class="txt-center">\n          <a (click)="smPlay(\'self\')">\n            <i class="fa fa-{{ smIsPlaying ? \'pause\' : \'play\' }}-circle fa-4x"></i>\n          </a>\n        </ion-col>\n        <!-- Track info -->\n        <ion-col *ngIf="smPlayerMode === \'info\'" col-8>\n          <p>{{ smActualTrack ? smActualTrack.artist : \'\' }}</p>\n          <p>{{ smActualTrack ? smActualTrack.title : \'\' }}</p>\n        </ion-col>\n        <!-- next -->\n        <ion-col *ngIf="smPlayerMode === \'controls\'" col-4 class="txt-center">\n          <a (click)="smPlay(\'next\')">\n            <i class="fa fa-angle-right fa-4x"></i>\n          </a>\n        </ion-col>\n        <!-- change player mode -->\n        <ion-col col-2 class="txt-center">\n          <a (click)="smChangePlayerMode()">\n            <i class="fa fa-cog fa-3x"></i>\n          </a>\n        </ion-col>\n      </ion-row>\n    </ion-grid>\n  </ion-toolbar>\n</ion-footer>'/*ion-inline-end:"/Users/marlenejej/Documents/Felipe/radio-black-brasil/radio-black-brasil/src/app/app.html"*/
+], app.prototype, "nav", void 0);
+app = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/Users/marlenejej/Documents/Felipe/radio-black-brasil/radio-black-brasil/src/app/app.html"*/'   <ion-menu [content]="content">\n   <ion-header>\n      <ion-toolbar>\n      <ion-title>Menu</ion-title>\n      </ion-toolbar>\n   </ion-header>\n   <ion-content>\n      <ion-list>\n      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">\n         {{p.title}}\n      </button>\n      </ion-list>\n   </ion-content>\n   </ion-menu>\n\n   <!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n   <ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>\n\n   <ion-footer>\n   <ion-toolbar>\n      <ion-grid>\n      <ion-row justify-content-between>\n         <!-- prev -->\n         <ion-col col-4 offset-1 class="txt-center" *ngIf="smPlayerMode === \'controls\'">\n            <a (click)="smPlay(\'prev\')">\n               <i class="fa fa-angle-left fa-4x"></i>\n            </a>\n         </ion-col>\n         <!-- play / pause -->\n         <div *ngIf="smWaiting; then tplLoading else tplPlayPause"></div>\n         <ng-template #tplLoading>\n            <ion-col col-1 class="txt-center">\n               <a><i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i></a>\n            </ion-col>\n         </ng-template>\n         <ng-template #tplPlayPause>\n            <ion-col col-1 class="txt-center">\n               <a (click)="smPlay(\'self\')">\n                  <i class="fa fa-{{ smPlaying ? \'pause\' : \'play\' }}-circle fa-4x"></i>\n               </a>\n            </ion-col>\n         </ng-template>\n         <!-- Track info -->\n         <ion-col *ngIf="smPlayerMode === \'info\'" col-10>\n            <p class="txt-bold">{{ smActualTrack ? smActualTrack.artist : \'\' }}</p>\n            <p>{{ smActualTrack ? smActualTrack.title : \'\' }}</p>\n         </ion-col>\n         <!-- next -->\n         <ion-col *ngIf="smPlayerMode === \'controls\'" col-4 class="txt-center">\n            <a (click)="smPlay(\'next\')">\n               <i class="fa fa-angle-right fa-4x"></i>\n            </a>\n         </ion-col>\n         <!-- change player mode -->\n         <ion-col col-1 class="txt-center">\n            <div *ngIf="smPlayerMode === \'controls\'; then tplPlayerModeOn else tplPlayerModeOff"></div>\n            <ng-template #tplPlayerModeOn>\n               <a (click)="smChangePlayerMode()">\n                  <i class="fa fa-toggle-on fa-2x"></i>\n               </a>\n            </ng-template>\n            <ng-template #tplPlayerModeOff>\n               <a (click)="smChangePlayerMode()">\n                  <i class="fa fa-toggle-off fa-2x"></i>\n               </a>\n            </ng-template>\n         </ion-col>\n      </ion-row>\n      </ion-grid>\n   </ion-toolbar>\n   </ion-footer>'/*ion-inline-end:"/Users/marlenejej/Documents/Felipe/radio-black-brasil/radio-black-brasil/src/app/app.html"*/
     }),
     __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* Platform */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* Platform */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_6__angular_http__["a" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6__angular_http__["a" /* Http */]) === "function" && _e || Object])
-], MyApp);
+], app);
 
 var _a, _b, _c, _d, _e;
 //# sourceMappingURL=app.component.js.map
