@@ -4,49 +4,74 @@
 var smCounter = 0,
     smTrackList = [],
     smTrackStr = 'track_',
-    smPlayer = {};
+    smPlayer = this;
 
 /* -------------------------------------------------------------
 ** smPlayer export functions
-*/
-smPlayer.play = function(_url){
-  if(_url)
-    soundManager.play(smTrackStr + '0');
-  else
-    soundManager.resumeAll();
-}
+// */
+// smPlayer.createSound = function(_url, _firstCall){
+//   soundManager.createSound({
+//     id: smTrackStr + smCounter,
+//     url: _url,
+//     autoPlay: _firstCall ? true : false,
+//     onload: function() {
+//       if(_firstCall) 
+//         soundManager.pauseAll();
+//     //     console.log(smCounter);
+//     //     smCounter++;
+//     }
+//   });
+//   // if(_firstCall)
+//   //   setTimeout(()=>{ smPlayer.pause(); }, 300);
+// }
 
-smPlayer.pause = function(){
-  soundManager.pauseAll();
-}
+// smPlayer.playTrackByUrl = function(_url){
+//   smPlayer.createSound(_url);
+//   smPlayer.play(_url);
+// }
 
-smPlayer.playTrackByUrl = function(_url){
-  createSound(_url);
-  smPlayer.play(_url);
-}
+// smPlayer.playTrackById = function(_id){
+//   soundManager.play(_id);
+// }
+
+// smPlayer.play = function(){
+//   soundManager.resumeAll();
+// }
+
+// smPlayer.pause = function(){
+//   soundManager.pauseAll();
+// }
+
+// smPlayer.playNext = function(){
+//   // stop actual
+//   soundManager.stop(smTrackStr + smCounter);
+//   // go to next
+//   smCounter++; 
+//   smPlayer.createSound(smTrackList[ smCounter ].url);
+//   soundManager.play(smTrackStr + smCounter);
+// }
+
+// smPlayer.playPrev = function(){
+//   // stop actual
+//   soundManager.stop(smTrackStr + smCounter);
+//   // go to prev
+//   smCounter--;
+//   soundManager.play(smTrackStr + smCounter);
+// }
+
+// smPlayer.setTrackList = function(_trackList){
+//   smTrackList = _trackList;
+// }
+
 /* 
 ** ------------------------------------------------------------- */
 
-function createSound (_url) {
-  soundManager.createSound({
-    id: smTrackStr + smCounter,
-    url: _url ? _url : getTrackUrl(),
-    autoLoad: true,
-    autoPlay: false,
-    onload: function() {
-        console.log(smCounter);
-        smCounter++;
-    },
-    volume: 50
-  });
-  // console.log(soundManager.sounds);
-}
 
-function getTrackUrl () {
-  smTrackList.push('../assets/teste.mp3');
+// function getTrackUrl () {
+//   smTrackList.push('../assets/teste.mp3');
 
-  return smTrackList[ smCounter ];
-}
+//   return smTrackList[ smCounter ];
+// }
 
 // soundManager.setup({
 //   // url: '/path/to/swf-files/',

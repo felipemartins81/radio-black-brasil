@@ -235,6 +235,9 @@ var MyApp = (function () {
         this.http = http;
         this.rootPage = __WEBPACK_IMPORTED_MODULE_4__pages_home_home__["a" /* HomePage */];
         this.smIsPlaying = false;
+        this.smCounter = 0;
+        this.smTrackStr = 'track_';
+        this.smPlayerMode = 'info';
         this.initializeApp();
         // menu itens
         this.pages = [
@@ -243,22 +246,64 @@ var MyApp = (function () {
         ];
         // get tracks api
         this.http.get('http://radioblackbrasil.com/api/tracks/').map(function (res) { return res.json(); }).subscribe(function (data) {
-            _this.smTracks = data.tracks;
-            smPlayer.playTrackByUrl(_this.smTracks[0].url);
-            _this.smIsPlaying = true;
-        }, function (error) { console.warn('error calling tracks service'); });
+            _this.smTrackList = data.tracks;
+            console.log(_this.smTrackList[0]);
+            _this.smCreateSound(_this.smTrackList[0].url, 'firstCall');
+        }, function (error) { console.warn(';( error calling tracks service'); });
     }
     /* -------------------------------------------------------------
     ** player functions
     */
-    MyApp.prototype.smTogglePlayPause = function () {
-        if (this.smIsPlaying) {
-            smPlayer.pause();
-            this.smIsPlaying = false;
+    MyApp.prototype.smCreateSound = function (_url, _firstCall) {
+        soundManager.createSound({
+            id: this.smTrackStr + this.smCounter.toString(),
+            url: _url,
+            autoPlay: _firstCall ? true : false,
+            onload: function () {
+                if (_firstCall)
+                    soundManager.pauseAll();
+            }
+        });
+        this.smActualTrack = this.smTrackList[this.smCounter];
+    };
+    MyApp.prototype.smPlay = function (_pos) {
+        switch (_pos) {
+            // play ot pause
+            case 'self':
+                if (this.smIsPlaying) {
+                    soundManager.pauseAll();
+                    this.smIsPlaying = false;
+                }
+                else {
+                    soundManager.resumeAll();
+                    this.smIsPlaying = true;
+                }
+                break;
+            // next or prev
+            default:
+                this.smIsPlaying = true;
+                // stop actual
+                soundManager.stop(this.smTrackStr + this.smCounter.toString());
+                // go to nwxt or prev
+                if (_pos === 'next') {
+                    this.smCounter++;
+                }
+                if (_pos === 'prev') {
+                    this.smCounter--;
+                }
+                this.smCreateSound(this.smTrackList[this.smCounter].url, null);
+                soundManager.play(this.smTrackStr + this.smCounter.toString());
+                break;
         }
-        else {
-            smPlayer.play();
-            this.smIsPlaying = true;
+    };
+    MyApp.prototype.smChangePlayerMode = function () {
+        switch (this.smPlayerMode) {
+            case 'controls':
+                this.smPlayerMode = 'info';
+                break;
+            case 'info':
+                this.smPlayerMode = 'controls';
+                break;
         }
     };
     /*
@@ -277,14 +322,15 @@ var MyApp = (function () {
 }());
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_13" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* Nav */]),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* Nav */])
+    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* Nav */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* Nav */]) === "function" && _a || Object)
 ], MyApp.prototype, "nav", void 0);
 MyApp = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/Users/marlenejej/Documents/Felipe/radio-black-brasil/radio-black-brasil/src/app/app.html"*/'<ion-menu [content]="content">\n  <ion-header>\n    <ion-toolbar>\n      <ion-title>Menu</ion-title>\n    </ion-toolbar>\n  </ion-header>\n  <ion-content>\n    <ion-list>\n      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">\n        {{p.title}}\n      </button>\n    </ion-list>\n  </ion-content>\n</ion-menu>\n\n<!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>\n\n<ion-footer>\n  <ion-toolbar>\n    <ion-grid>\n      <ion-row>\n        <ion-col col-4>col</ion-col>\n        <ion-col col-4 class="txt-center">\n          <a (click)="smTogglePlayPause()">\n            <i class="fa fa-{{ smIsPlaying ? \'pause\' : \'play\' }}-circle fa-4x"></i>\n          </a>\n          <!-- <i class="fa fa-circle"></i> -->\n        </ion-col>\n        <ion-col col-4>col</ion-col>\n      </ion-row>\n    </ion-grid>\n  </ion-toolbar>\n</ion-footer>'/*ion-inline-end:"/Users/marlenejej/Documents/Felipe/radio-black-brasil/radio-black-brasil/src/app/app.html"*/
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/Users/marlenejej/Documents/Felipe/radio-black-brasil/radio-black-brasil/src/app/app.html"*/'<ion-menu [content]="content">\n  <ion-header>\n    <ion-toolbar>\n      <ion-title>Menu</ion-title>\n    </ion-toolbar>\n  </ion-header>\n  <ion-content>\n    <ion-list>\n      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">\n        {{p.title}}\n      </button>\n    </ion-list>\n  </ion-content>\n</ion-menu>\n\n<!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>\n\n<ion-footer>\n  <ion-toolbar>\n    <ion-grid>\n      <ion-row>\n        <!-- prev -->\n        <ion-col *ngIf="smPlayerMode === \'controls\'" col-4 class="txt-center">\n          <a (click)="smPlay(\'prev\')">\n            <i class="fa fa-angle-left fa-4x"></i>\n          </a>\n        </ion-col>\n        <!-- play / pause -->\n        <ion-col col-2 class="txt-center">\n          <a (click)="smPlay(\'self\')">\n            <i class="fa fa-{{ smIsPlaying ? \'pause\' : \'play\' }}-circle fa-4x"></i>\n          </a>\n        </ion-col>\n        <!-- Track info -->\n        <ion-col *ngIf="smPlayerMode === \'info\'" col-8>\n          <p>{{ smActualTrack ? smActualTrack.artist : \'\' }}</p>\n          <p>{{ smActualTrack ? smActualTrack.title : \'\' }}</p>\n        </ion-col>\n        <!-- next -->\n        <ion-col *ngIf="smPlayerMode === \'controls\'" col-4 class="txt-center">\n          <a (click)="smPlay(\'next\')">\n            <i class="fa fa-angle-right fa-4x"></i>\n          </a>\n        </ion-col>\n        <!-- change player mode -->\n        <ion-col col-2 class="txt-center">\n          <a (click)="smChangePlayerMode()">\n            <i class="fa fa-cog fa-3x"></i>\n          </a>\n        </ion-col>\n      </ion-row>\n    </ion-grid>\n  </ion-toolbar>\n</ion-footer>'/*ion-inline-end:"/Users/marlenejej/Documents/Felipe/radio-black-brasil/radio-black-brasil/src/app/app.html"*/
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */], __WEBPACK_IMPORTED_MODULE_6__angular_http__["a" /* Http */]])
+    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* Platform */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* Platform */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_6__angular_http__["a" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6__angular_http__["a" /* Http */]) === "function" && _e || Object])
 ], MyApp);
 
+var _a, _b, _c, _d, _e;
 //# sourceMappingURL=app.component.js.map
 
 /***/ })
