@@ -19,6 +19,31 @@
 
 .fa-pulse { animation: fa-spin .6s infinite steps(8); }
 
+.card {
+  .card-content {
+    .card-title { color: #999 }
+    p { color: #ccc }
+  }
+  &[img-mini] {
+    img {
+      width: 30%;
+      height: 110px;
+      float: left;
+   }
+   .card-title {
+      padding: 0 0 10px 0;
+   }
+   .card-content {
+      width: 70%;
+      float: right;
+      padding: 5px 10px 0 15px;
+   }
+   .row {
+      clear: both;
+   }
+  }
+}
+
 .footer {
   a { color: #777 }
   p {
