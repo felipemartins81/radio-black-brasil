@@ -28245,11 +28245,23 @@ ion-navbar.toolbar {
 }
 
 .txt-center {
-  text-align: center;
+  text-align: center !important;
 }
 
 .txt-bold {
-  font-weight: bold;
+  font-weight: bold !important;
+}
+
+.txt-italic {
+  font-style: italic !important;
+}
+
+.txt-big {
+  font-size: 120% !important;
+}
+
+.txt-small {
+  font-size: 85% !important;
 }
 
 .fa-pulse {
@@ -28266,18 +28278,17 @@ ion-navbar.toolbar {
 }
 
 .card[img-mini] img {
-  width: 30%;
+  width: 110px;
   height: 110px;
   float: left;
+  margin: 0 15px 0 0;
 }
 
 .card[img-mini] .card-title {
-  padding: 0 0 10px 0;
+  padding: 0 0 5px 0;
 }
 
 .card[img-mini] .card-content {
-  width: 70%;
-  float: right;
   padding: 5px 10px 0 15px;
 }
 

@@ -1,6 +1,6 @@
 webpackJsonp([0],{
 
-/***/ 106:
+/***/ 107:
 /***/ (function(module, exports) {
 
 function webpackEmptyAsyncContext(req) {
@@ -9,7 +9,7 @@ function webpackEmptyAsyncContext(req) {
 webpackEmptyAsyncContext.keys = function() { return []; };
 webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
 module.exports = webpackEmptyAsyncContext;
-webpackEmptyAsyncContext.id = 106;
+webpackEmptyAsyncContext.id = 107;
 
 /***/ }),
 
@@ -33,6 +33,9 @@ webpackEmptyAsyncContext.id = 149;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__ = __webpack_require__(194);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -44,24 +47,41 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
+
+
 var HomePage = (function () {
-    function HomePage(navCtrl) {
+    function HomePage(navCtrl, http) {
+        // let limit = 10;
+        // let offset = 0;
+        var _this = this;
         this.navCtrl = navCtrl;
+        this.http = http;
+        this.trackList = [];
+        this.trackListSplited = [];
+        // get tracks api
+        this.http.get('http://radioblackbrasil.com/api/tracks/latest/').map(function (res) { return res.json(); }).subscribe(function (data) {
+            _this.trackList = data.tracks;
+            _this.trackList.forEach(function (e, i) {
+                if (i < 5) {
+                    _this.trackListSplited.push(e);
+                }
+            });
+        }, function (error) { console.warn(';( error calling tracks service'); });
     }
     return HomePage;
 }());
 HomePage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-home',template:/*ion-inline-start:"/Users/marlenejej/Documents/Felipe/radio-black-brasil/radio-black-brasil/src/pages/home/home.html"*/'<ion-header>\n   <ion-navbar>\n      <button ion-button menuToggle>\n         <ion-icon name="menu"></ion-icon>\n      </button>\n      <ion-title>Dj recomenda</ion-title>\n   </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n   <ion-card img-mini>\n      <img src="assets/img/nin-live.png"/>\n      <ion-card-content>\n         <ion-card-title>\n            Nine Inch Nails Live\n         </ion-card-title>\n         <p>\n            The most popular industrial group ever, and largely responsible for bringing the music to a mass audience.\n         </p>\n      </ion-card-content>\n      <ion-row no-padding>\n         <ion-col>\n            <button ion-button clear small color="danger" icon-start>\n               <ion-icon name=\'star\'></ion-icon>\n               Favorite\n            </button>\n         </ion-col>\n         <ion-col text-center>\n            <button ion-button clear small color="danger" icon-start>\n               <ion-icon name=\'musical-notes\'></ion-icon>\n               Listen\n            </button>\n         </ion-col>\n         <ion-col text-right>\n            <button ion-button clear small color="danger" icon-start>\n               <ion-icon name=\'share-alt\'></ion-icon>\n               Share\n            </button>\n         </ion-col>\n      </ion-row>\n   </ion-card>\n   \n</ion-content>'/*ion-inline-end:"/Users/marlenejej/Documents/Felipe/radio-black-brasil/radio-black-brasil/src/pages/home/home.html"*/
+        selector: 'page-home',template:/*ion-inline-start:"/Users/marlenejej/Documents/Felipe/radio-black-brasil/radio-black-brasil/src/pages/home/home.html"*/'<ion-header>\n   <ion-navbar>\n      <button ion-button menuToggle>\n         <ion-icon name="menu"></ion-icon>\n      </button>\n      <ion-title>Dj recomenda</ion-title>\n   </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n   <ion-card img-mini *ngFor="let track of trackListSplited">\n      <img *ngIf="track.photo" src="{{ track.photo }}"/>\n      <ion-card-content>\n         <ion-card-title>{{ track.artist }}</ion-card-title>\n         <p class="txt-bold"> <i class="fa fa-music"></i> &nbsp; {{ track.title }}</p>\n         <p class="txt-italic">{{ track.genero }}</p>\n      </ion-card-content>\n      <ion-row no-padding>\n         <ion-col>\n            <button ion-button clear small color="danger" icon-start>\n               <!-- <ion-icon name=\'share-alt\'></ion-icon>\n               Share -->\n            </button>\n         </ion-col>\n         <ion-col text-center>\n            <button ion-button clear small color="danger" icon-start>\n               <!-- <ion-icon name=\'musical-notes\'></ion-icon>\n               Listen -->\n            </button>\n         </ion-col>\n         <ion-col text-right>\n            <button ion-button clear color="danger" icon-start>\n               <ion-icon name=\'play\'></ion-icon>\n               Ouvir\n            </button>\n         </ion-col>\n      </ion-row>\n   </ion-card>\n\n   <!-- behind player space -->\n   <br>\n   <br>\n   <br>\n   <br>\n   \n</ion-content>'/*ion-inline-end:"/Users/marlenejej/Documents/Felipe/radio-black-brasil/radio-black-brasil/src/pages/home/home.html"*/
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* NavController */]])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* NavController */], __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* Http */]])
 ], HomePage);
 
 //# sourceMappingURL=home.js.map
 
 /***/ }),
 
-/***/ 194:
+/***/ 195:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -117,13 +137,13 @@ var ListPage_1;
 
 /***/ }),
 
-/***/ 195:
+/***/ 196:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(196);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(214);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(197);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(215);
 
 
 Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_1__app_module__["a" /* AppModule */]);
@@ -131,18 +151,18 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 
 /***/ }),
 
-/***/ 214:
+/***/ 215:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(107);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_component__ = __webpack_require__(254);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_component__ = __webpack_require__(255);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_home_home__ = __webpack_require__(193);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_list_list__ = __webpack_require__(194);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_list_list__ = __webpack_require__(195);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_native_status_bar__ = __webpack_require__(189);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ionic_native_splash_screen__ = __webpack_require__(192);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -195,7 +215,7 @@ AppModule = __decorate([
 
 /***/ }),
 
-/***/ 254:
+/***/ 255:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -205,9 +225,9 @@ AppModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(189);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(192);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_home_home__ = __webpack_require__(193);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_list_list__ = __webpack_require__(194);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_http__ = __webpack_require__(107);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_add_operator_map__ = __webpack_require__(263);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_list_list__ = __webpack_require__(195);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_http__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_add_operator_map__ = __webpack_require__(194);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_rxjs_add_operator_map__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -246,7 +266,7 @@ var app = (function () {
             { title: 'List', component: __WEBPACK_IMPORTED_MODULE_5__pages_list_list__["a" /* ListPage */] }
         ];
         // get tracks api
-        this.http.get('http://radioblackbrasil.com/api/tracks/').map(function (res) { return res.json(); }).subscribe(function (data) {
+        this.http.get('http://radioblackbrasil.com/api/tracks/random/').map(function (res) { return res.json(); }).subscribe(function (data) {
             _this.smTrackList = data.tracks;
             _this.smCreateSound(_this.smTrackList[0].url, 'firstCall');
         }, function (error) { console.warn(';( error calling tracks service'); });
@@ -348,5 +368,5 @@ app = __decorate([
 
 /***/ })
 
-},[195]);
+},[196]);
 //# sourceMappingURL=main.js.map

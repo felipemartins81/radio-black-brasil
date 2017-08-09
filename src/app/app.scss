@@ -14,8 +14,11 @@
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
 
-.txt-center { text-align: center }
-.txt-bold { font-weight: bold }
+.txt-center { text-align: center !important }
+.txt-bold { font-weight: bold !important }
+.txt-italic { font-style: italic !important }
+.txt-big { font-size: 120% !important }
+.txt-small { font-size: 85% !important }
 
 .fa-pulse { animation: fa-spin .6s infinite steps(8); }
 
@@ -26,16 +29,15 @@
   }
   &[img-mini] {
     img {
-      width: 30%;
+      width: 110px;
       height: 110px;
       float: left;
+      margin: 0 15px 0 0;
    }
    .card-title {
-      padding: 0 0 10px 0;
+      padding: 0 0 5px 0;
    }
    .card-content {
-      width: 70%;
-      float: right;
       padding: 5px 10px 0 15px;
    }
    .row {

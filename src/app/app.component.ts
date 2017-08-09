@@ -36,7 +36,7 @@ export class app {
 		];
 
 		// get tracks api
-		this.http.get('http://radioblackbrasil.com/api/tracks/').map(res => res.json()).subscribe(
+		this.http.get('http://radioblackbrasil.com/api/tracks/random/').map(res => res.json()).subscribe(
 			data => {
 				this.smTrackList = data.tracks;
 				this.smCreateSound(this.smTrackList[0].url, 'firstCall');
