@@ -10,7 +10,7 @@
 <ion-content padding>
 
    <ion-card img-mini *ngFor="let track of trackListSplited">
-      <img *ngIf="track.photo" src="{{ track.photo }}"/>
+      <img *ngIf="track.capa" src="http://radioblackbrasil.com/files/albums/{{ track.capa }}"/>
       <ion-card-content>
          <ion-card-title>{{ track.artist }}</ion-card-title>
          <p class="txt-bold"> <i class="fa fa-music"></i> &nbsp; {{ track.title }}</p>
