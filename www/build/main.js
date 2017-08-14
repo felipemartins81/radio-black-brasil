@@ -82,9 +82,10 @@ HomePage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
         selector: 'page-home',template:/*ion-inline-start:"C:\Repos\radio-black-brasil\src\pages\home\home.html"*/'<ion-header>\n\n   <ion-navbar>\n\n      <button ion-button menuToggle>\n\n         <ion-icon name="menu"></ion-icon>\n\n      </button>\n\n      <ion-title>Dj recomenda</ion-title>\n\n   </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding>\n\n\n\n   <ion-card img-mini *ngFor="let track of trackListSplited">\n\n      <img *ngIf="track.capa" src="http://radioblackbrasil.com/files/albums/{{ track.capa }}"/>\n\n      <ion-card-content>\n\n         <ion-card-title>{{ track.artist }}</ion-card-title>\n\n         <p class="txt-bold"> <i class="fa fa-music"></i> &nbsp; {{ track.title }}</p>\n\n         <p class="txt-italic">{{ track.genero }}</p>\n\n      </ion-card-content>\n\n      <ion-row no-padding>\n\n         <ion-col>\n\n            <button ion-button clear small color="danger" icon-start>\n\n               <!-- <ion-icon name=\'share-alt\'></ion-icon>\n\n               Share -->\n\n            </button>\n\n         </ion-col>\n\n         <ion-col text-center>\n\n            <button ion-button clear small color="danger" icon-start>\n\n               <!-- <ion-icon name=\'musical-notes\'></ion-icon>\n\n               Listen -->\n\n            </button>\n\n         </ion-col>\n\n         <ion-col text-right>\n\n            <button ion-button clear color="danger" icon-start>\n\n               <ion-icon name=\'play\'></ion-icon>\n\n               Ouvir\n\n            </button>\n\n         </ion-col>\n\n      </ion-row>\n\n   </ion-card>\n\n\n\n   <!-- behind player space -->\n\n   <br>\n\n   <br>\n\n   <br>\n\n   <br>\n\n   \n\n</ion-content>'/*ion-inline-end:"C:\Repos\radio-black-brasil\src\pages\home\home.html"*/
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* NavController */], __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* Http */]])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* Http */]) === "function" && _b || Object])
 ], HomePage);
 
+var _a, _b;
 //# sourceMappingURL=home.js.map
 
 /***/ }),
@@ -237,6 +238,7 @@ AppModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_http__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_add_operator_map__ = __webpack_require__(194);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_rxjs_add_operator_map__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__app_service__ = __webpack_require__(264);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -254,9 +256,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var app = (function () {
-    function app(platform, statusBar, splashScreen, http) {
+    function app(missionService, platform, statusBar, splashScreen, http) {
         var _this = this;
+        this.missionService = missionService;
         this.platform = platform;
         this.statusBar = statusBar;
         this.splashScreen = splashScreen;
@@ -271,7 +275,8 @@ var app = (function () {
         // menu itens
         this.pages = [
             { title: 'Home', component: __WEBPACK_IMPORTED_MODULE_4__pages_home_home__["a" /* HomePage */] },
-            { title: 'List', component: __WEBPACK_IMPORTED_MODULE_5__pages_list_list__["a" /* ListPage */] }
+            { title: 'List', component: __WEBPACK_IMPORTED_MODULE_5__pages_list_list__["a" /* ListPage */] },
+            { title: missionService.getStr(), component: null }
         ];
         // get tracks api
         this.http.get('http://radioblackbrasil.com/api/tracks/random/').map(function (res) { return res.json(); }).subscribe(function (data) {
@@ -364,15 +369,60 @@ var app = (function () {
 }());
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_13" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* Nav */]),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* Nav */])
+    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* Nav */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* Nav */]) === "function" && _a || Object)
 ], app.prototype, "nav", void 0);
 app = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"C:\Repos\radio-black-brasil\src\app\app.html"*/'   <ion-menu [content]="content">\n\n   <ion-header>\n\n      <ion-toolbar>\n\n      <ion-title>Menu</ion-title>\n\n      </ion-toolbar>\n\n   </ion-header>\n\n   <ion-content>\n\n      <ion-list>\n\n      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">\n\n         {{p.title}}\n\n      </button>\n\n      </ion-list>\n\n   </ion-content>\n\n   </ion-menu>\n\n\n\n   <!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n\n   <ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>\n\n\n\n   <ion-footer>\n\n   <ion-toolbar>\n\n      <ion-grid>\n\n      <ion-row justify-content-between>\n\n         <!-- prev -->\n\n         <ion-col col-4 offset-1 class="txt-center" *ngIf="smPlayerMode === \'controls\'">\n\n            <a (click)="smPlay(\'prev\')">\n\n               <i class="fa fa-angle-left fa-4x"></i>\n\n            </a>\n\n         </ion-col>\n\n         <!-- play / pause -->\n\n         <div *ngIf="smWaiting; then tplLoading else tplPlayPause"></div>\n\n         <ng-template #tplLoading>\n\n            <ion-col col-1 class="txt-center">\n\n               <a><i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i></a>\n\n            </ion-col>\n\n         </ng-template>\n\n         <ng-template #tplPlayPause>\n\n            <ion-col col-1 class="txt-center">\n\n               <a (click)="smPlay(\'self\')">\n\n                  <i class="fa fa-{{ smPlaying ? \'pause\' : \'play\' }}-circle fa-4x"></i>\n\n               </a>\n\n            </ion-col>\n\n         </ng-template>\n\n         <!-- Track info -->\n\n         <ion-col *ngIf="smPlayerMode === \'info\'" col-10>\n\n            <p class="txt-bold">{{ smActualTrack ? smActualTrack.artist : \'\' }}</p>\n\n            <p>{{ smActualTrack ? smActualTrack.title : \'\' }}</p>\n\n         </ion-col>\n\n         <!-- next -->\n\n         <ion-col *ngIf="smPlayerMode === \'controls\'" col-4 class="txt-center">\n\n            <a (click)="smPlay(\'next\')">\n\n               <i class="fa fa-angle-right fa-4x"></i>\n\n            </a>\n\n         </ion-col>\n\n         <!-- change player mode -->\n\n         <ion-col col-1 class="txt-center">\n\n            <div *ngIf="smPlayerMode === \'controls\'; then tplPlayerModeOn else tplPlayerModeOff"></div>\n\n            <ng-template #tplPlayerModeOn>\n\n               <a (click)="smChangePlayerMode()">\n\n                  <i class="fa fa-toggle-on fa-2x"></i>\n\n               </a>\n\n            </ng-template>\n\n            <ng-template #tplPlayerModeOff>\n\n               <a (click)="smChangePlayerMode()">\n\n                  <i class="fa fa-toggle-off fa-2x"></i>\n\n               </a>\n\n            </ng-template>\n\n         </ion-col>\n\n      </ion-row>\n\n      </ion-grid>\n\n   </ion-toolbar>\n\n   </ion-footer>'/*ion-inline-end:"C:\Repos\radio-black-brasil\src\app\app.html"*/
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"C:\Repos\radio-black-brasil\src\app\app.html"*/'<ion-menu [content]="content">\n\n   <ion-header>\n\n      <ion-toolbar>\n\n      <ion-title>Menu</ion-title>\n\n      </ion-toolbar>\n\n   </ion-header>\n\n   <ion-content>\n\n      <ion-list>\n\n      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">\n\n         {{p.title}}\n\n      </button>\n\n      </ion-list>\n\n   </ion-content>\n\n</ion-menu>\n\n\n\n<!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>\n\n\n\n<ion-footer>\n\n   <ion-toolbar>\n\n      <ion-grid>\n\n      <ion-row justify-content-between>\n\n         <!-- prev -->\n\n         <ion-col col-4 offset-1 class="txt-center" *ngIf="smPlayerMode === \'controls\'">\n\n            <a (click)="smPlay(\'prev\')">\n\n               <i class="fa fa-angle-left fa-4x"></i>\n\n            </a>\n\n         </ion-col>\n\n         <!-- play / pause -->\n\n         <div *ngIf="smWaiting; then tplLoading else tplPlayPause"></div>\n\n         <ng-template #tplLoading>\n\n            <ion-col col-1 class="txt-center">\n\n               <a><i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i></a>\n\n            </ion-col>\n\n         </ng-template>\n\n         <ng-template #tplPlayPause>\n\n            <ion-col col-1 class="txt-center">\n\n               <a (click)="smPlay(\'self\')">\n\n                  <i class="fa fa-{{ smPlaying ? \'pause\' : \'play\' }}-circle fa-4x"></i>\n\n               </a>\n\n            </ion-col>\n\n         </ng-template>\n\n         <!-- Track info -->\n\n         <ion-col *ngIf="smPlayerMode === \'info\'" col-10>\n\n            <p class="txt-bold">{{ smActualTrack ? smActualTrack.artist : \'\' }}</p>\n\n            <p>{{ smActualTrack ? smActualTrack.title : \'\' }}</p>\n\n         </ion-col>\n\n         <!-- next -->\n\n         <ion-col *ngIf="smPlayerMode === \'controls\'" col-4 class="txt-center">\n\n            <a (click)="smPlay(\'next\')">\n\n               <i class="fa fa-angle-right fa-4x"></i>\n\n            </a>\n\n         </ion-col>\n\n         <!-- change player mode -->\n\n         <ion-col col-1 class="txt-center">\n\n            <div *ngIf="smPlayerMode === \'controls\'; then tplPlayerModeOn else tplPlayerModeOff"></div>\n\n            <ng-template #tplPlayerModeOn>\n\n               <a (click)="smChangePlayerMode()">\n\n                  <i class="fa fa-toggle-on fa-2x"></i>\n\n               </a>\n\n            </ng-template>\n\n            <ng-template #tplPlayerModeOff>\n\n               <a (click)="smChangePlayerMode()">\n\n                  <i class="fa fa-toggle-off fa-2x"></i>\n\n               </a>\n\n            </ng-template>\n\n         </ion-col>\n\n      </ion-row>\n\n      </ion-grid>\n\n   </ion-toolbar>\n\n</ion-footer>'/*ion-inline-end:"C:\Repos\radio-black-brasil\src\app\app.html"*/,
+        providers: [__WEBPACK_IMPORTED_MODULE_8__app_service__["a" /* MissionService */]]
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */], __WEBPACK_IMPORTED_MODULE_6__angular_http__["a" /* Http */]])
+    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_8__app_service__["a" /* MissionService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_8__app_service__["a" /* MissionService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* Platform */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* Platform */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_6__angular_http__["a" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6__angular_http__["a" /* Http */]) === "function" && _f || Object])
 ], app);
 
+var _a, _b, _c, _d, _e, _f;
 //# sourceMappingURL=app.component.js.map
+
+/***/ }),
+
+/***/ 264:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MissionService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+var MissionService = (function () {
+    function MissionService() {
+        // Observable string sources
+        this.strTeste = 'str service teste';
+    }
+    //   private missionConfirmedSource = new Subject<string>();
+    // Observable string streams
+    //   missionAnnounced$ = this.missionAnnouncedSource.asObservable();
+    //   missionConfirmed$ = this.missionConfirmedSource.asObservable();
+    // Service message commands
+    MissionService.prototype.announceMission = function (mission) {
+        // this.missionAnnouncedSource.next(mission);
+        this.strTeste = mission;
+    };
+    MissionService.prototype.confirmMission = function (astronaut) {
+        // this.missionConfirmedSource.next(astronaut);
+    };
+    MissionService.prototype.getStr = function () {
+        return this.strTeste;
+    };
+    return MissionService;
+}());
+MissionService = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Injectable */])()
+], MissionService);
+
+//# sourceMappingURL=app.service.js.map
 
 /***/ })
 

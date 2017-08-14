@@ -7,10 +7,13 @@ import { ListPage } from '../pages/list/list';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
+import { MissionService }     from './app.service';
+
 declare var soundManager: any;
 
 @Component({
-	templateUrl: 'app.html'
+	templateUrl: 'app.html',
+   providers: [MissionService]
 })
 export class app {
 	@ViewChild(Nav) nav: Nav;
@@ -26,13 +29,14 @@ export class app {
 	smPlayerMode: string = 'info';
 	smWaiting: boolean = true;
 
-	constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public http: Http) {
+	constructor(private missionService: MissionService, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public http: Http) {
 		this.initializeApp();
 
 		// menu itens
 		this.pages = [
 			{ title: 'Home', component: HomePage },
-			{ title: 'List', component: ListPage }
+			{ title: 'List', component: ListPage },
+         { title: missionService.getStr(), component: null }
 		];
 
 		// get tracks api
@@ -102,6 +106,7 @@ export class app {
 				break;
 		}
 	}
+
 	smChangePlayerMode(): void {
 		switch(this.smPlayerMode){
 			case 'controls':
