@@ -1,0 +1,117 @@
+import { Injectable } from '@angular/core';
+
+declare var soundManager: any;
+
+@Injectable()
+export class PlayerService {
+
+  // Observable string sources
+  private strTeste = 'str service teste';
+//   private missionConfirmedSource = new Subject<string>();
+
+
+	smTrackList: any;
+	smPlaying: boolean = false;
+	smCounter: number = 0;
+	smTrackStr: string = 'track_';
+	smActualTrack: any;
+	// smPlayerMode: string = 'info';
+	smWaiting: boolean = true;
+
+  // Observable string streams
+//   missionAnnounced$ = this.missionAnnouncedSource.asObservable();
+//   missionConfirmed$ = this.missionConfirmedSource.asObservable();
+
+  // Service message commands
+  announceMission(mission: string) {
+    // this.missionAnnouncedSource.next(mission);
+    this.strTeste = mission;
+  }
+
+  confirmMission(astronaut: string) {
+    // this.missionConfirmedSource.next(astronaut);
+  }
+
+  getStr(){
+      return this.strTeste;
+  }
+
+  //
+
+   smCreateSound(_url, _firstCall): void{ 
+		this.smActualTrack = this.smTrackList[ this.smCounter ];
+		if(!this.smActualTrack.smTrackId){
+			this.smWaiting = true;
+			this.smActualTrack.smTrackId = this.smTrackStr + this.smCounter.toString();
+			soundManager.createSound({
+				id: this.smActualTrack.smTrackId,
+				url: _url,
+				autoPlay: _firstCall ? true : false,
+				onload: function() {
+					if(_firstCall) 
+						soundManager.pauseAll();
+					setAfterCreate('onload');
+				}
+			});
+		}
+		let setAfterCreate = (_type) => {
+			switch(_type){
+				case 'onload': this.smWaiting = false;
+			}
+		}
+	}
+
+	smPlay(_pos): boolean {
+		switch(_pos){
+			// play ot pause
+			case 'self':
+				if(this.smPlaying){
+					soundManager.pauseAll();
+					this.smPlaying = false;
+				}
+				else{
+					soundManager.resumeAll();
+					this.smPlaying = true;
+				}
+				break;
+			// next or prev
+			default:
+				if(_pos === 'prev'){
+					if(this.smCounter === 0) return; // first
+					soundManager.stop(this.smActualTrack.smTrackId);
+               soundManager.unload(this.smActualTrack.smTrackId);
+					this.smCounter--;
+				}
+				if(_pos === 'next'){
+					if(this.smCounter === this.smTrackList.length - 1) return; // last
+					soundManager.stop(this.smActualTrack.smTrackId);
+               soundManager.unload(this.smActualTrack.smTrackId);
+					this.smCounter++; 
+				}
+				this.smCreateSound(this.smTrackList[ this.smCounter ].url, null); 
+				soundManager.play(this.smActualTrack.smTrackId);
+				this.smPlaying = true;
+				break;
+		}
+      return this.smPlaying;
+	}
+
+   trackIsLoaded(): boolean {
+      return !this.smWaiting;
+   }
+
+   getTrackInfo(): object {
+      return this.smActualTrack;
+   }
+
+	// smChangePlayerMode(): void {
+	// 	switch(this.smPlayerMode){
+	// 		case 'controls':
+	// 			this.smPlayerMode = 'info';
+	// 			break;
+	// 		case 'info':
+	// 			this.smPlayerMode = 'controls';
+	// 			break;
+	// 	}
+	// }
+}
