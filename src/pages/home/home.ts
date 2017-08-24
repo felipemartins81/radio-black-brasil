@@ -3,6 +3,8 @@ import { NavController } from 'ionic-angular';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
+import { PlayerService } from '../../app/player.service';
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -11,7 +13,7 @@ export class HomePage {
    trackList: any = [];
    trackListSplited: any = [];
 
-   constructor(public navCtrl: NavController, public http: Http) {
+   constructor(public navCtrl: NavController, public http: Http, private playerService: PlayerService) {
       // let limit = 10;
       // let offset = 0;
 
@@ -28,5 +30,12 @@ export class HomePage {
 			error => { console.warn(';( error calling tracks service'); }
 		);
    }
+
+	play(_pos, _index): void {
+      console.log(_pos);
+      console.log(_index);
+      console.log(this.trackList[_index].url);
+      this.playerService.smCreateSound(this.trackList[_index].url, 'outPlayer');
+	}
 
 }

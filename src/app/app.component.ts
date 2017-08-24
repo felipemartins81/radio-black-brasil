@@ -22,12 +22,12 @@ export class app {
 	pages: Array<{title: string, component: any}>;
 
 	// smTrackList: any;
-	smPlaying: boolean = false;
+	isPlaying: boolean = false;
 	// smCounter: number = 0;
 	// smTrackStr: string = 'track_';
-	smActualTrack: object;
-	smPlayerMode: string = 'info';
-	smWaiting: boolean = true;
+	actualTrack: object;
+	playerMode: string = 'info';
+	isWaiting: boolean = true;
 
 	constructor(private playerService: PlayerService, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public http: Http) {
 		this.initializeApp();
@@ -36,12 +36,12 @@ export class app {
 		this.pages = [
 			{ title: 'Home', component: HomePage },
 			{ title: 'List', component: ListPage },
-         	{ title: playerService.getStr(), component: null }
+			{ title: playerService.getStr(), component: null }
 		];
 
 		// this.smPlaying = playerService.smPlaying;
 		// this.smPlayerMode = playerService.smPlayerMode;
-		this.smWaiting = playerService.smWaiting;
+		this.isWaiting = playerService.smWaiting;
 
 		// get tracks api
 		this.http.get('http://radioblackbrasil.com/api/tracks/random/').map(res => res.json()).subscribe(
@@ -49,10 +49,9 @@ export class app {
 				playerService.smTrackList = data.tracks;
 				playerService.smCreateSound(playerService.smTrackList[0].url, 'firstCall');
 				let interval = setInterval(()=>{
-					console.log(playerService.trackIsLoaded());
 					if(playerService.trackIsLoaded()){
-						this.smWaiting = false;
-						this.smActualTrack = playerService.getTrackInfo();
+						this.isWaiting = false;
+						this.actualTrack = playerService.getTrackInfo();
 						clearInterval(interval);
 					}
 				}, 2000);
@@ -61,17 +60,18 @@ export class app {
 		);
 	}
 
-	smPlay(_pos): void {
-		this.smPlaying = this.playerService.smPlay(_pos);
+	play(_pos): void {
+		this.isPlaying = this.playerService.smPlay(_pos);
+		this.actualTrack = this.playerService.getTrackInfo();
 	}
 
-	smChangePlayerMode(): void {
-		switch(this.smPlayerMode){
+	changePlayerMode(): void {
+		switch(this.playerMode){
 			case 'controls':
-				this.smPlayerMode = 'info';
+				this.playerMode = 'info';
 				break;
 			case 'info':
-				this.smPlayerMode = 'controls';
+				this.playerMode = 'controls';
 				break;
 		}
 	}

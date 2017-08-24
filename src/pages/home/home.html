@@ -9,12 +9,12 @@
 
 <ion-content padding>
 
-   <ion-card img-mini *ngFor="let track of trackListSplited">
+   <ion-card img-mini *ngFor="let track of trackListSplited; let i = index">
       <img *ngIf="track.capa" src="http://radioblackbrasil.com/files/albums/{{ track.capa }}"/>
       <ion-card-content>
-         <ion-card-title>{{ track.artist }}</ion-card-title>
-         <p class="txt-bold"> <i class="fa fa-music"></i> &nbsp; {{ track.title }}</p>
-         <p class="txt-italic">{{ track.genero }}</p>
+         <ion-card-title class="txt-no-break">{{ track.artist }}</ion-card-title>
+         <p class="txt-bold txt-no-break"> <i class="fa fa-music"></i> &nbsp; {{ track.title }}</p>
+         <p class="txt-italic txt-no-break">{{ track.genero }}</p>
       </ion-card-content>
       <ion-row no-padding>
          <ion-col>
@@ -30,9 +30,8 @@
             </button>
          </ion-col>
          <ion-col text-right>
-            <button ion-button clear color="danger" icon-start>
-               <ion-icon name='play'></ion-icon>
-               Ouvir
+            <button ion-button clear icon-start (click)="play('self', i)">
+               <ion-icon name='play'></ion-icon> Ouvir
             </button>
          </ion-col>
       </ion-row>

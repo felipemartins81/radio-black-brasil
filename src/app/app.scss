@@ -19,6 +19,12 @@
 .txt-italic { font-style: italic !important }
 .txt-big { font-size: 120% !important }
 .txt-small { font-size: 85% !important }
+.txt-no-break {
+  width: 60%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 .fa-pulse { animation: fa-spin .6s infinite steps(8); }
 
@@ -43,6 +49,10 @@
    .row {
       clear: both;
       border-top: 1px solid #1a1a1a;
+
+      .col {
+        padding: 0;
+      }
    }
   }
 }

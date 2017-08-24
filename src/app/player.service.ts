@@ -18,27 +18,31 @@ export class PlayerService {
 	// smPlayerMode: string = 'info';
 	smWaiting: boolean = true;
 
-  // Observable string streams
-//   missionAnnounced$ = this.missionAnnouncedSource.asObservable();
-//   missionConfirmed$ = this.missionConfirmedSource.asObservable();
+	// Observable string streams
+	//   missionAnnounced$ = this.missionAnnouncedSource.asObservable();
+	//   missionConfirmed$ = this.missionConfirmedSource.asObservable();
 
-  // Service message commands
-  announceMission(mission: string) {
-    // this.missionAnnouncedSource.next(mission);
-    this.strTeste = mission;
-  }
+	// Service message commands
+	announceMission(mission: string) {
+		// this.missionAnnouncedSource.next(mission);
+		this.strTeste = mission;
+	}
 
-  confirmMission(astronaut: string) {
-    // this.missionConfirmedSource.next(astronaut);
-  }
+	confirmMission(astronaut: string) {
+		// this.missionConfirmedSource.next(astronaut);
+	}
 
-  getStr(){
-      return this.strTeste;
-  }
+	getStr(){
+			return this.strTeste;
+	}
 
   //
 
-   smCreateSound(_url, _firstCall): void{ 
+   smCreateSound(_url, _type): void{ 
+		if(_type === 'outPlayer'){
+			this.smCounter++
+		}
+
 		this.smActualTrack = this.smTrackList[ this.smCounter ];
 		if(!this.smActualTrack.smTrackId){
 			this.smWaiting = true;
@@ -46,10 +50,11 @@ export class PlayerService {
 			soundManager.createSound({
 				id: this.smActualTrack.smTrackId,
 				url: _url,
-				autoPlay: _firstCall ? true : false,
+				autoPlay: _type ? true : false,
 				onload: function() {
-					if(_firstCall) 
+					if(_type === 'firstCall'){
 						soundManager.pauseAll();
+					}
 					setAfterCreate('onload');
 				}
 			});
