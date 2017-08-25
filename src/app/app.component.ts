@@ -1,10 +1,12 @@
-import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
-import { Http } from '@angular/http';
+import { Component, ViewChild } 	from '@angular/core';
+import { Http } 						from '@angular/http';
+import { Nav, Platform } 			from 'ionic-angular';
+import { ActionSheetController } from 'ionic-angular';
+import { StatusBar } 				from '@ionic-native/status-bar';
+import { SplashScreen } 			from '@ionic-native/splash-screen';
+import { HomePage } 					from '../pages/home/home';
+import { ListPage } 					from '../pages/list/list';
+import { Subscription } 			from 'rxjs/Subscription';
 import 'rxjs/add/operator/map';
 
 import { PlayerService }     from './player.service';
@@ -28,20 +30,28 @@ export class app {
 	actualTrack: object;
 	playerMode: string = 'info';
 	isWaiting: boolean = true;
+	
+	subscription: Subscription;
 
-	constructor(private playerService: PlayerService, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public http: Http) {
-		this.initializeApp();
+	constructor(
+		private playerService: PlayerService, 
+		public platform: Platform, 
+		public statusBar: StatusBar, 
+		public splashScreen: SplashScreen, 
+		public http: Http,
+		public actionSheetCtrl: ActionSheetController) {
+		// this.initializeApp();
 
 		// menu itens
 		this.pages = [
 			{ title: 'Home', component: HomePage },
-			{ title: 'List', component: ListPage },
-			{ title: playerService.getStr(), component: null }
+			{ title: 'List', component: ListPage }
 		];
 
 		// this.smPlaying = playerService.smPlaying;
 		// this.smPlayerMode = playerService.smPlayerMode;
-		this.isWaiting = playerService.smWaiting;
+
+		// this.isWaiting = playerService.smWaiting;
 
 		// get tracks api
 		this.http.get('http://radioblackbrasil.com/api/tracks/random/').map(res => res.json()).subscribe(
@@ -49,8 +59,9 @@ export class app {
 				playerService.smTrackList = data.tracks;
 				playerService.smCreateSound(playerService.smTrackList[0].url, 'firstCall');
 				let interval = setInterval(()=>{
-					if(playerService.trackIsLoaded()){
-						this.isWaiting = false;
+					// if(playerService.trackIsLoaded()){
+					if(!this.isWaiting){
+						// this.isWaiting = false;
 						this.actualTrack = playerService.getTrackInfo();
 						clearInterval(interval);
 					}
@@ -58,6 +69,44 @@ export class app {
 			},
 			error => { console.warn(';( error calling tracks service'); }
 		);
+	} // constructor
+	
+	presentActionSheet = () => {
+		let actionSheet = this.actionSheetCtrl.create({
+			title: 'Modify your album',
+			buttons: [
+				{
+				text: 'Destructive',
+				role: 'destructive',
+				handler: () => {
+					console.log('Destructive clicked');
+				}
+				},{
+				text: 'Archive',
+				handler: () => {
+					console.log('Archive clicked');
+				}
+				},{
+				text: 'Cancel',
+				role: 'cancel',
+				handler: () => {
+					console.log('Cancel clicked');
+				}
+				}
+			]
+		});
+		actionSheet.present();
+	}
+
+	// obsStr: string = 'asa';
+
+	ngOnInit() {
+		// this.subscription = this.playerService.streamObs$.subscribe(item => this.obsStr = item)
+		this.subscription = this.playerService.smWaiting$.subscribe(item => this.isWaiting = item)
+	}
+	ngOnDestroy() {
+		// prevent memory leak when component is destroyed
+		this.subscription.unsubscribe();
 	}
 
 	play(_pos): void {

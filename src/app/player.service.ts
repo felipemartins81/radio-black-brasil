@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 declare var soundManager: any;
 
@@ -16,7 +17,13 @@ export class PlayerService {
 	smTrackStr: string = 'track_';
 	smActualTrack: any;
 	// smPlayerMode: string = 'info';
-	smWaiting: boolean = true;
+
+	// smWaiting: boolean = true;
+	private smWaiting = new BehaviorSubject<boolean>(true);
+	smWaiting$ = this.smWaiting.asObservable();
+
+	// private testeObs = new BehaviorSubject<string>('111');
+	// streamObs$ = this.testeObs.asObservable();
 
 	// Observable string streams
 	//   missionAnnounced$ = this.missionAnnouncedSource.asObservable();
@@ -32,20 +39,17 @@ export class PlayerService {
 		// this.missionConfirmedSource.next(astronaut);
 	}
 
-	getStr(){
-			return this.strTeste;
-	}
-
   //
 
    smCreateSound(_url, _type): void{ 
 		if(_type === 'outPlayer'){
 			this.smCounter++
 		}
-
+// this.testeObs.next('222');
 		this.smActualTrack = this.smTrackList[ this.smCounter ];
 		if(!this.smActualTrack.smTrackId){
-			this.smWaiting = true;
+			// this.smWaiting = true;
+			this.smWaiting.next(true);
 			this.smActualTrack.smTrackId = this.smTrackStr + this.smCounter.toString();
 			soundManager.createSound({
 				id: this.smActualTrack.smTrackId,
@@ -61,7 +65,8 @@ export class PlayerService {
 		}
 		let setAfterCreate = (_type) => {
 			switch(_type){
-				case 'onload': this.smWaiting = false;
+				// case 'onload': this.smWaiting = false;
+				case 'onload': this.smWaiting.next(false);
 			}
 		}
 	}

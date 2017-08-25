@@ -20,8 +20,23 @@
    <ion-toolbar>
       <ion-grid>
       <ion-row justify-content-between>
+         ... {{ isWaiting }}
+         <!-- change player mode -->
+         <ion-col col-12 class="txt-right">
+            <div *ngIf="playerMode === 'controls'; then tplPlayerModeOn else tplPlayerModeOff"></div>
+            <ng-template #tplPlayerModeOn>
+               <a (click)="presentActionSheet()">
+                  <i class="fa fa-toggle-on fa-2x"></i>
+               </a>
+            </ng-template>
+            <ng-template #tplPlayerModeOff>
+               <a (click)="presentActionSheet()">
+                  <i class="fa fa-toggle-off fa-2x"></i>
+               </a>
+            </ng-template>
+         </ion-col>
          <!-- prev -->
-         <ion-col col-4 offset-1 class="txt-center" *ngIf="playerMode === 'controls'">
+         <ion-col *ngIf="playerMode === 'controls'" col-5 class="txt-center">
             <a (click)="play('prev')">
                <i class="fa fa-angle-left fa-4x"></i>
             </a>
@@ -29,12 +44,12 @@
          <!-- play / pause -->
          <div *ngIf="isWaiting; then tplLoading else tplPlayPause"></div>
          <ng-template #tplLoading>
-            <ion-col col-1 class="txt-center">
+            <ion-col col-2 class="txt-center">
                <a><i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i></a>
             </ion-col>
          </ng-template>
          <ng-template #tplPlayPause>
-            <ion-col col-1 class="txt-center">
+            <ion-col col-2 class="txt-center">
                <a (click)="play('self')">
                   <i class="fa fa-{{ isPlaying ? 'pause' : 'play' }}-circle fa-4x"></i>
                </a>
@@ -46,24 +61,10 @@
             <p class="txt-no-break">{{ actualTrack ? actualTrack.title : '' }}</p>
          </ion-col>
          <!-- next -->
-         <ion-col *ngIf="playerMode === 'controls'" col-4 class="txt-center">
+         <ion-col *ngIf="playerMode === 'controls'" col-5 class="txt-center">
             <a (click)="play('next')">
                <i class="fa fa-angle-right fa-4x"></i>
             </a>
-         </ion-col>
-         <!-- change player mode -->
-         <ion-col col-1 class="txt-center">
-            <div *ngIf="playerMode === 'controls'; then tplPlayerModeOn else tplPlayerModeOff"></div>
-            <ng-template #tplPlayerModeOn>
-               <a (click)="changePlayerMode()">
-                  <i class="fa fa-toggle-on fa-2x"></i>
-               </a>
-            </ng-template>
-            <ng-template #tplPlayerModeOff>
-               <a (click)="changePlayerMode()">
-                  <i class="fa fa-toggle-off fa-2x"></i>
-               </a>
-            </ng-template>
          </ion-col>
       </ion-row>
       </ion-grid>
