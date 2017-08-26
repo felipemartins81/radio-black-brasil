@@ -6,8 +6,8 @@ import 'rxjs/add/operator/map';
 import { PlayerService } from '../../app/player.service';
 
 @Component({
-  selector: 'page-home',
-  templateUrl: 'home.html'
+   selector: 'page-home',
+   templateUrl: 'home.html'
 })
 export class HomePage {
    trackList: any = [];
@@ -17,25 +17,26 @@ export class HomePage {
       // let limit = 10;
       // let offset = 0;
 
-		// get tracks api
-		this.http.get('http://radioblackbrasil.com/api/tracks/latest/').map(res => res.json()).subscribe(
-			data => {
+      // get tracks api
+      this.http.get('http://radioblackbrasil.com/api/tracks/latest/').map(res => res.json()).subscribe(
+         data => {
             this.trackList = data.tracks;
-            this.trackList.forEach((e, i) => {
-               if(i < 5){
+            this.trackList.some((e, i) => {
+               if(i < 10){
                   this.trackListSplited.push(e);
                }
+               else { return true; }
             });
-			},
-			error => { console.warn(';( error calling tracks service'); }
-		);
+         },
+         error => { console.warn(';( error calling tracks service'); }
+      );
    }
 
-	play(_pos, _index): void {
+   play(_pos, _index): void {
       console.log(_pos);
       console.log(_index);
       console.log(this.trackList[_index].url);
       this.playerService.smCreateSound(this.trackList[_index].url, 'outPlayer');
-	}
+   }
 
 }

@@ -20,21 +20,12 @@
    <ion-toolbar>
       <ion-grid>
       <ion-row justify-content-between>
-         ... {{ isWaiting }}
          <!-- change player mode -->
-         <ion-col col-12 class="txt-right">
-            <div *ngIf="playerMode === 'controls'; then tplPlayerModeOn else tplPlayerModeOff"></div>
-            <ng-template #tplPlayerModeOn>
-               <a (click)="presentActionSheet()">
-                  <i class="fa fa-toggle-on fa-2x"></i>
-               </a>
-            </ng-template>
-            <ng-template #tplPlayerModeOff>
-               <a (click)="presentActionSheet()">
-                  <i class="fa fa-toggle-off fa-2x"></i>
-               </a>
-            </ng-template>
-         </ion-col>
+         <!-- <ion-col col-12 class="txt-right">
+            <a *ngIf="actualTrack" (click)="presentActionSheet()">
+               <i class="fa fa-angle-up fa-2x"></i>
+            </a>
+         </ion-col> -->
          <!-- prev -->
          <ion-col *ngIf="playerMode === 'controls'" col-5 class="txt-center">
             <a (click)="play('prev')">
@@ -57,6 +48,7 @@
          </ng-template>
          <!-- Track info -->
          <ion-col *ngIf="playerMode === 'info'" col-10>
+            <a *ngIf="actualTrack" (click)="presentActionSheet()" class="f-right"><i class="fa fa-angle-up fa-2x"></i></a>
             <p class="txt-bold txt-no-break">{{ actualTrack ? actualTrack.artist : '' }}</p>
             <p class="txt-no-break">{{ actualTrack ? actualTrack.title : '' }}</p>
          </ion-col>

@@ -27,7 +27,7 @@ export class app {
 	isPlaying: boolean = false;
 	// smCounter: number = 0;
 	// smTrackStr: string = 'track_';
-	actualTrack: object;
+	actualTrack: any;
 	playerMode: string = 'info';
 	isWaiting: boolean = true;
 	
@@ -44,8 +44,8 @@ export class app {
 
 		// menu itens
 		this.pages = [
-			{ title: 'Home', component: HomePage },
-			{ title: 'List', component: ListPage }
+			{ title: 'test', component: HomePage },
+			{ title: 'test item', component: ListPage }
 		];
 
 		// this.smPlaying = playerService.smPlaying;
@@ -73,25 +73,25 @@ export class app {
 	
 	presentActionSheet = () => {
 		let actionSheet = this.actionSheetCtrl.create({
-			title: 'Modify your album',
+			title: this.actualTrack.artist +' - '+ this.actualTrack.title,
 			buttons: [
 				{
-				text: 'Destructive',
-				role: 'destructive',
-				handler: () => {
-					console.log('Destructive clicked');
-				}
-				},{
-				text: 'Archive',
-				handler: () => {
-					console.log('Archive clicked');
-				}
-				},{
-				text: 'Cancel',
-				role: 'cancel',
-				handler: () => {
-					console.log('Cancel clicked');
-				}
+					icon: 'rewind',
+					handler: () => {
+						this.play('prev')
+					}
+				},
+				{
+					icon: this.isPlaying ? 'pause' : 'play',
+					handler: () => {
+						this.play('self');
+					}
+				},
+				{
+					icon: 'fastforward',
+					handler: () => {
+						this.play('next')
+					}
 				}
 			]
 		});
