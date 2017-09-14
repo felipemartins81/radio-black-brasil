@@ -32,11 +32,14 @@ export class HomePage {
       );
    }
 
-   play(_pos, _index): void {
-      console.log(_pos);
-      console.log(_index);
-      console.log(this.trackList[_index].url);
-      this.playerService.smCreateSound(this.trackList[_index].url, 'outPlayer');
+   play(_pos, _index, _artist, _title): void {
+      let newTrack = {
+         artist: _artist,
+         title: _title,
+         pos: _pos,
+         index: _index
+      };
+      this.playerService.smCreateSound(this.trackList[_index].url, newTrack);
    }
 
 }

@@ -19,6 +19,7 @@
 <ion-footer>
    <ion-toolbar>
       <ion-grid>
+      <ion-row id="progress"></ion-row>
       <ion-row justify-content-between>
          <!-- change player mode -->
          <!-- <ion-col col-12 class="txt-right">
@@ -33,19 +34,14 @@
             </a>
          </ion-col>
          <!-- play / pause -->
-         <div *ngIf="isWaiting; then tplLoading else tplPlayPause"></div>
-         <ng-template #tplLoading>
-            <ion-col col-2 class="txt-center">
-               <a><i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i></a>
-            </ion-col>
-         </ng-template>
-         <ng-template #tplPlayPause>
-            <ion-col col-2 class="txt-center">
-               <a (click)="play('self')">
-                  <i class="fa fa-{{ isPlaying ? 'pause' : 'play' }}-circle fa-4x"></i>
-               </a>
-            </ion-col>
-         </ng-template>
+         <ion-col col-2 class="txt-center" [hidden]="!isWaiting">
+            <a><i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i></a>
+         </ion-col>
+         <ion-col col-2 class="txt-center" [hidden]="isWaiting">
+            <a (click)="play('self')">
+               <i class="fa fa-{{ isPlaying ? 'pause' : 'play' }}-circle fa-4x"></i>
+            </a>
+         </ion-col>
          <!-- Track info -->
          <ion-col *ngIf="playerMode === 'info'" col-10>
             <a *ngIf="actualTrack" (click)="presentActionSheet()" class="f-right"><i class="fa fa-angle-up fa-2x"></i></a>

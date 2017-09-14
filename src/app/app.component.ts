@@ -29,7 +29,7 @@ export class app {
 	// smTrackStr: string = 'track_';
 	actualTrack: any;
 	playerMode: string = 'info';
-	isWaiting: boolean = true;
+	isWaiting: boolean = false;
 	
 	subscription: Subscription;
 
@@ -40,7 +40,7 @@ export class app {
 		public splashScreen: SplashScreen, 
 		public http: Http,
 		public actionSheetCtrl: ActionSheetController) {
-		// this.initializeApp();
+		this.initializeApp();
 
 		// menu itens
 		this.pages = [
@@ -57,15 +57,18 @@ export class app {
 		this.http.get('http://radioblackbrasil.com/api/tracks/random/').map(res => res.json()).subscribe(
 			data => {
 				playerService.smTrackList = data.tracks;
-				playerService.smCreateSound(playerService.smTrackList[0].url, 'firstCall');
-				let interval = setInterval(()=>{
-					// if(playerService.trackIsLoaded()){
-					if(!this.isWaiting){
-						// this.isWaiting = false;
-						this.actualTrack = playerService.getTrackInfo();
-						clearInterval(interval);
-					}
-				}, 2000);
+				// playerService.smCreateSound(playerService.smTrackList[0].url, null);
+				this.play('firstCall');
+
+				// let interval = setInterval(()=>{
+				// 	// if(playerService.trackIsLoaded()){
+				// 	if(!this.isWaiting){
+				// 		// this.isWaiting = false;
+				// 		this.actualTrack = playerService.getTrackInfo();
+				// 		clearInterval(interval);
+				// 	}
+				// }, 1000);
+				
 			},
 			error => { console.warn(';( error calling tracks service'); }
 		);
@@ -101,8 +104,14 @@ export class app {
 	// obsStr: string = 'asa';
 
 	ngOnInit() {
-		// this.subscription = this.playerService.streamObs$.subscribe(item => this.obsStr = item)
-		this.subscription = this.playerService.smWaiting$.subscribe(item => this.isWaiting = item)
+		this.subscription = this.playerService.smWaiting$.subscribe(
+			(item) => { 
+				this.isWaiting = item;
+				console.log('+_+_+_+_+_+_+_+_+_+_+_+_+_'); 
+				this.actualTrack = this.playerService.getTrackInfo();
+			}
+		);
+		// this.subscription = this.playerService.smActualTrack$.subscribe(item => this.actualTrack = item);
 	}
 	ngOnDestroy() {
 		// prevent memory leak when component is destroyed
