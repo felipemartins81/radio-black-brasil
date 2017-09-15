@@ -18,10 +18,12 @@ export class PlayerService {
 	smTrackStr: string = 'track_';
 	smActualTrack: any;
 	smLastTrackId: number = 0;
+	smCreatedFromOut: boolean = false;
 	// smPlayerMode: string = 'info';
+	auxTrackList = [];
 
 	// smWaiting: boolean = true;
-	private smWaiting = new BehaviorSubject<boolean>(true);
+	private smWaiting = new BehaviorSubject<boolean>(false);
 	smWaiting$ = this.smWaiting.asObservable();
 
    smCreateSound(_url, _type): void{ 
@@ -33,13 +35,17 @@ export class PlayerService {
 			this.smActualTrack.smTrackId = null;
 			this.smActualTrack.artist = _type.artist;
 			this.smActualTrack.title = _type.title;
+			this.auxTrackList.push(this.smActualTrack);
+			this.smCreatedFromOut = true;
 		}
 		else {
 			this.smActualTrack = this.smTrackList[ this.smCounter ];
 		}
+console.warn(this.smTrackList);
 		if(!this.smActualTrack.smTrackId){
-			// this.smWaiting = true;
-			this.smWaiting.next(true);
+			if(_type !== 'firstCall'){
+				this.smWaiting.next(true);
+			}
 			this.smActualTrack.smTrackId = this.smTrackStr + this.smCounter.toString();
 			soundManager.createSound({
 				id: this.smActualTrack.smTrackId,
@@ -99,8 +105,16 @@ export class PlayerService {
 				soundManager.stop(this.smActualTrack.smTrackId);
 				soundManager.unload(this.smActualTrack.smTrackId);
 				this.smCounter--;
-				this.smCreateSound(this.smTrackList[ this.smCounter ].url, null); 
-				soundManager.play(this.smActualTrack.smTrackId);
+// console.log(this.smTrackList);
+// 				if(this.smCreatedFromOut){
+// 					this.smActualTrack = this.smTrackList[ this.smCounter ];
+// 					soundManager.play(this.smActualTrack.smTrackId);
+// 					this.smCreatedFromOut = false;
+// 				}
+// 				else{
+					this.smCreateSound(this.smTrackList[ this.smCounter ].url, null); 
+					soundManager.play(this.smActualTrack.smTrackId);
+				// }
 				this.smPlaying = _pos === 'firstCall' ? false : true;
 				break;
 			case 'next':
@@ -116,9 +130,9 @@ export class PlayerService {
       return this.smPlaying;
 	}
 
-   trackIsLoaded(): boolean {
-      return !this.smWaiting;
-   }
+   // trackIsLoaded(): boolean {
+   //    return !this.smWaiting;
+   // }
 
    getTrackInfo(): object {
       return this.smActualTrack;

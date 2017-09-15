@@ -107,7 +107,6 @@ export class app {
 		this.subscription = this.playerService.smWaiting$.subscribe(
 			(item) => { 
 				this.isWaiting = item;
-				console.log('+_+_+_+_+_+_+_+_+_+_+_+_+_'); 
 				this.actualTrack = this.playerService.getTrackInfo();
 			}
 		);

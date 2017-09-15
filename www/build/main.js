@@ -132,9 +132,11 @@ var PlayerService = (function () {
         this.smCounter = 0;
         this.smTrackStr = 'track_';
         this.smLastTrackId = 0;
+        this.smCreatedFromOut = false;
         // smPlayerMode: string = 'info';
+        this.auxTrackList = [];
         // smWaiting: boolean = true;
-        this.smWaiting = new __WEBPACK_IMPORTED_MODULE_1_rxjs_BehaviorSubject__["BehaviorSubject"](true);
+        this.smWaiting = new __WEBPACK_IMPORTED_MODULE_1_rxjs_BehaviorSubject__["BehaviorSubject"](false);
         this.smWaiting$ = this.smWaiting.asObservable();
         // smChangePlayerMode(): void {
         // 	switch(this.smPlayerMode){
@@ -157,13 +159,17 @@ var PlayerService = (function () {
             this.smActualTrack.smTrackId = null;
             this.smActualTrack.artist = _type.artist;
             this.smActualTrack.title = _type.title;
+            this.auxTrackList.push(this.smActualTrack);
+            this.smCreatedFromOut = true;
         }
         else {
             this.smActualTrack = this.smTrackList[this.smCounter];
         }
+        console.warn(this.smTrackList);
         if (!this.smActualTrack.smTrackId) {
-            // this.smWaiting = true;
-            this.smWaiting.next(true);
+            if (_type !== 'firstCall') {
+                this.smWaiting.next(true);
+            }
             this.smActualTrack.smTrackId = this.smTrackStr + this.smCounter.toString();
             soundManager.createSound({
                 id: this.smActualTrack.smTrackId,
@@ -222,8 +228,16 @@ var PlayerService = (function () {
                 soundManager.stop(this.smActualTrack.smTrackId);
                 soundManager.unload(this.smActualTrack.smTrackId);
                 this.smCounter--;
+                // console.log(this.smTrackList);
+                // 				if(this.smCreatedFromOut){
+                // 					this.smActualTrack = this.smTrackList[ this.smCounter ];
+                // 					soundManager.play(this.smActualTrack.smTrackId);
+                // 					this.smCreatedFromOut = false;
+                // 				}
+                // 				else{
                 this.smCreateSound(this.smTrackList[this.smCounter].url, null);
                 soundManager.play(this.smActualTrack.smTrackId);
+                // }
                 this.smPlaying = _pos === 'firstCall' ? false : true;
                 break;
             case 'next':
@@ -239,9 +253,9 @@ var PlayerService = (function () {
         }
         return this.smPlaying;
     };
-    PlayerService.prototype.trackIsLoaded = function () {
-        return !this.smWaiting;
-    };
+    // trackIsLoaded(): boolean {
+    //    return !this.smWaiting;
+    // }
     PlayerService.prototype.getTrackInfo = function () {
         return this.smActualTrack;
     };
@@ -493,7 +507,6 @@ var app = (function () {
         var _this = this;
         this.subscription = this.playerService.smWaiting$.subscribe(function (item) {
             _this.isWaiting = item;
-            console.log('+_+_+_+_+_+_+_+_+_+_+_+_+_');
             _this.actualTrack = _this.playerService.getTrackInfo();
         });
         // this.subscription = this.playerService.smActualTrack$.subscribe(item => this.actualTrack = item);
@@ -530,20 +543,16 @@ var app = (function () {
 }());
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_13" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["e" /* Nav */]),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["e" /* Nav */])
+    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["e" /* Nav */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["e" /* Nav */]) === "function" && _a || Object)
 ], app.prototype, "nav", void 0);
 app = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"C:\Repos\radio-black-brasil\src\app\app.html"*/'<ion-menu [content]="content">\n\n   <ion-header>\n\n      <ion-toolbar>\n\n      <ion-title>Menu</ion-title>\n\n      </ion-toolbar>\n\n   </ion-header>\n\n   <ion-content>\n\n      <ion-list>\n\n      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">\n\n         {{p.title}}\n\n      </button>\n\n      </ion-list>\n\n   </ion-content>\n\n</ion-menu>\n\n\n\n<!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>\n\n\n\n<ion-footer>\n\n   <ion-toolbar>\n\n      <ion-grid>\n\n      <ion-row id="progress"></ion-row>\n\n      <ion-row justify-content-between>\n\n         <!-- change player mode -->\n\n         <!-- <ion-col col-12 class="txt-right">\n\n            <a *ngIf="actualTrack" (click)="presentActionSheet()">\n\n               <i class="fa fa-angle-up fa-2x"></i>\n\n            </a>\n\n         </ion-col> -->\n\n         <!-- prev -->\n\n         <ion-col *ngIf="playerMode === \'controls\'" col-5 class="txt-center">\n\n            <a (click)="play(\'prev\')">\n\n               <i class="fa fa-angle-left fa-4x"></i>\n\n            </a>\n\n         </ion-col>\n\n         <!-- play / pause -->\n\n         <ion-col col-2 class="txt-center" [hidden]="!isWaiting">\n\n            <a><i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i></a>\n\n         </ion-col>\n\n         <ion-col col-2 class="txt-center" [hidden]="isWaiting">\n\n            <a (click)="play(\'self\')">\n\n               <i class="fa fa-{{ isPlaying ? \'pause\' : \'play\' }}-circle fa-4x"></i>\n\n            </a>\n\n         </ion-col>\n\n         <!-- Track info -->\n\n         <ion-col *ngIf="playerMode === \'info\'" col-10>\n\n            <a *ngIf="actualTrack" (click)="presentActionSheet()" class="f-right"><i class="fa fa-angle-up fa-2x"></i></a>\n\n            <p class="txt-bold txt-no-break">{{ actualTrack ? actualTrack.artist : \'\' }}</p>\n\n            <p class="txt-no-break">{{ actualTrack ? actualTrack.title : \'\' }}</p>\n\n         </ion-col>\n\n         <!-- next -->\n\n         <ion-col *ngIf="playerMode === \'controls\'" col-5 class="txt-center">\n\n            <a (click)="play(\'next\')">\n\n               <i class="fa fa-angle-right fa-4x"></i>\n\n            </a>\n\n         </ion-col>\n\n      </ion-row>\n\n      </ion-grid>\n\n   </ion-toolbar>\n\n</ion-footer>'/*ion-inline-end:"C:\Repos\radio-black-brasil\src\app\app.html"*/,
         providers: [__WEBPACK_IMPORTED_MODULE_8__player_service__["a" /* PlayerService */]]
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_8__player_service__["a" /* PlayerService */],
-        __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["h" /* Platform */],
-        __WEBPACK_IMPORTED_MODULE_3__ionic_native_status_bar__["a" /* StatusBar */],
-        __WEBPACK_IMPORTED_MODULE_4__ionic_native_splash_screen__["a" /* SplashScreen */],
-        __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */],
-        __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["a" /* ActionSheetController */]])
+    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_8__player_service__["a" /* PlayerService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_8__player_service__["a" /* PlayerService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["h" /* Platform */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["h" /* Platform */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__ionic_native_status_bar__["a" /* StatusBar */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ionic_native_status_bar__["a" /* StatusBar */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4__ionic_native_splash_screen__["a" /* SplashScreen */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__ionic_native_splash_screen__["a" /* SplashScreen */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["a" /* ActionSheetController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["a" /* ActionSheetController */]) === "function" && _g || Object])
 ], app);
 
+var _a, _b, _c, _d, _e, _f, _g;
 //# sourceMappingURL=app.component.js.map
 
 /***/ })
