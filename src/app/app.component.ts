@@ -11,8 +11,6 @@ import 'rxjs/add/operator/map';
 
 import { PlayerService }     from './player.service';
 
-// declare var soundManager: any;
-
 @Component({
 	templateUrl: 'app.html',
    providers: [PlayerService]
@@ -23,10 +21,7 @@ export class app {
 	rootPage: any = HomePage;
 	pages: Array<{title: string, component: any}>;
 
-	// smTrackList: any;
 	isPlaying: boolean = false;
-	// smCounter: number = 0;
-	// smTrackStr: string = 'track_';
 	actualTrack: any;
 	playerMode: string = 'info';
 	isWaiting: boolean = false;
@@ -48,27 +43,11 @@ export class app {
 			{ title: 'test item', component: ListPage }
 		];
 
-		// this.smPlaying = playerService.smPlaying;
-		// this.smPlayerMode = playerService.smPlayerMode;
-
-		// this.isWaiting = playerService.smWaiting;
-
 		// get tracks api
 		this.http.get('http://radioblackbrasil.com/api/tracks/random/').map(res => res.json()).subscribe(
 			data => {
 				playerService.smTrackList = data.tracks;
-				// playerService.smCreateSound(playerService.smTrackList[0].url, null);
 				this.play('firstCall');
-
-				// let interval = setInterval(()=>{
-				// 	// if(playerService.trackIsLoaded()){
-				// 	if(!this.isWaiting){
-				// 		// this.isWaiting = false;
-				// 		this.actualTrack = playerService.getTrackInfo();
-				// 		clearInterval(interval);
-				// 	}
-				// }, 1000);
-				
 			},
 			error => { console.warn(';( error calling tracks service'); }
 		);
@@ -101,8 +80,6 @@ export class app {
 		actionSheet.present();
 	}
 
-	// obsStr: string = 'asa';
-
 	ngOnInit() {
 		this.subscription = this.playerService.smWaiting$.subscribe(
 			(item) => { 
@@ -110,10 +87,8 @@ export class app {
 				this.actualTrack = this.playerService.getTrackInfo();
 			}
 		);
-		// this.subscription = this.playerService.smActualTrack$.subscribe(item => this.actualTrack = item);
 	}
 	ngOnDestroy() {
-		// prevent memory leak when component is destroyed
 		this.subscription.unsubscribe();
 	}
 

@@ -21,12 +21,6 @@
       <ion-grid>
       <ion-row id="progress"></ion-row>
       <ion-row justify-content-between>
-         <!-- change player mode -->
-         <!-- <ion-col col-12 class="txt-right">
-            <a *ngIf="actualTrack" (click)="presentActionSheet()">
-               <i class="fa fa-angle-up fa-2x"></i>
-            </a>
-         </ion-col> -->
          <!-- prev -->
          <ion-col *ngIf="playerMode === 'controls'" col-5 class="txt-center">
             <a (click)="play('prev')">

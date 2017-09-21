@@ -14,8 +14,6 @@ export class HomePage {
    trackListSplited: any = [];
 
    constructor(public navCtrl: NavController, public http: Http, private playerService: PlayerService) {
-      // let limit = 10;
-      // let offset = 0;
 
       // get tracks api
       this.http.get('http://radioblackbrasil.com/api/tracks/latest/').map(res => res.json()).subscribe(

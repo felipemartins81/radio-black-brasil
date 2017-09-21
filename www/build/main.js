@@ -61,8 +61,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 var HomePage = (function () {
     function HomePage(navCtrl, http, playerService) {
-        // let limit = 10;
-        // let offset = 0;
         var _this = this;
         this.navCtrl = navCtrl;
         this.http = http;
@@ -125,47 +123,30 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 var PlayerService = (function () {
     function PlayerService() {
-        // Observable string sources
-        //   private strTeste = 'str service teste';
-        //   private missionConfirmedSource = new Subject<string>();
         this.smPlaying = false;
         this.smCounter = 0;
         this.smTrackStr = 'track_';
         this.smLastTrackId = 0;
         this.smCreatedFromOut = false;
-        // smPlayerMode: string = 'info';
         this.auxTrackList = [];
-        // smWaiting: boolean = true;
         this.smWaiting = new __WEBPACK_IMPORTED_MODULE_1_rxjs_BehaviorSubject__["BehaviorSubject"](false);
         this.smWaiting$ = this.smWaiting.asObservable();
-        // smChangePlayerMode(): void {
-        // 	switch(this.smPlayerMode){
-        // 		case 'controls':
-        // 			this.smPlayerMode = 'info';
-        // 			break;
-        // 		case 'info':
-        // 			this.smPlayerMode = 'controls';
-        // 			break;
-        // 	}
-        // }
     }
     PlayerService.prototype.smCreateSound = function (_url, _type) {
         var _this = this;
         // out player
         if (_type && typeof (_type) === 'object') {
-            // console.log(_type);
             this.smCounter = this.smLastTrackId;
+            this.smActualTrack = this.smTrackList[this.smCounter];
             this.smActualTrack.url = _url;
             this.smActualTrack.smTrackId = null;
             this.smActualTrack.artist = _type.artist;
             this.smActualTrack.title = _type.title;
-            this.auxTrackList.push(this.smActualTrack);
             this.smCreatedFromOut = true;
         }
         else {
             this.smActualTrack = this.smTrackList[this.smCounter];
         }
-        console.warn(this.smTrackList);
         if (!this.smActualTrack.smTrackId) {
             if (_type !== 'firstCall') {
                 this.smWaiting.next(true);
@@ -176,12 +157,17 @@ var PlayerService = (function () {
                 url: _url,
                 autoPlay: true,
                 onload: function () {
-                    // if(_type === 'firstCall'){
-                    // 	soundManager.pauseAll();
-                    // }
                     setAfterCreate('onload');
                 },
-                onbufferchange: function () {
+                onbufferchange: function (state) {
+                    if (this.smWaiting !== undefined && state === 0) {
+                        console.warn('>> buffer change state 0');
+                        this.smWaiting.next(false);
+                    }
+                    else if (this.smWaiting !== undefined && state === 1) {
+                        console.warn('<< buffer change state 1');
+                        this.smWaiting.next(true);
+                    }
                 },
                 whileplaying: function () {
                     __WEBPACK_IMPORTED_MODULE_2_jquery__("#progress").css('width', ((this.position / this.duration) * 100) + '%');
@@ -190,13 +176,8 @@ var PlayerService = (function () {
         }
         var setAfterCreate = function (_onType) {
             switch (_onType) {
-                // case 'onload': this.smWaiting = false;
                 case 'onload':
                     _this.smWaiting.next(false);
-                    // if(this.smCounter === 0){
-                    // 	console.log(' - --  -- - - - -- - - - ');
-                    // 	setTimeout(()=>{ soundManager.pauseAll() }, 500);
-                    // }
                     break;
             }
         };
@@ -206,11 +187,10 @@ var PlayerService = (function () {
         switch (_pos) {
             case 'firstCall':
                 this.smCreateSound(this.smTrackList[this.smCounter].url, _pos);
-                // soundManager.play(this.smActualTrack.smTrackId);
                 this.smPlaying = false;
                 setTimeout(function () { soundManager.pauseAll(); }, 500);
                 break;
-            // play ot pause
+            // play or pause
             case 'self':
                 if (this.smPlaying) {
                     soundManager.pauseAll();
@@ -228,17 +208,9 @@ var PlayerService = (function () {
                 soundManager.stop(this.smActualTrack.smTrackId);
                 soundManager.unload(this.smActualTrack.smTrackId);
                 this.smCounter--;
-                // console.log(this.smTrackList);
-                // 				if(this.smCreatedFromOut){
-                // 					this.smActualTrack = this.smTrackList[ this.smCounter ];
-                // 					soundManager.play(this.smActualTrack.smTrackId);
-                // 					this.smCreatedFromOut = false;
-                // 				}
-                // 				else{
-                this.smCreateSound(this.smTrackList[this.smCounter].url, null);
-                soundManager.play(this.smActualTrack.smTrackId);
-                // }
-                this.smPlaying = _pos === 'firstCall' ? false : true;
+                this.smActualTrack = this.smTrackList[this.smCounter];
+                soundManager.play(this.smTrackStr + this.smCounter.toString());
+                this.smPlaying = true;
                 break;
             case 'next':
                 if (this.smCounter === this.smTrackList.length - 1)
@@ -248,14 +220,11 @@ var PlayerService = (function () {
                 this.smCounter++;
                 this.smCreateSound(this.smTrackList[this.smCounter].url, null);
                 soundManager.play(this.smActualTrack.smTrackId);
-                this.smPlaying = _pos === 'firstCall' ? false : true;
+                this.smPlaying = true;
                 break;
         }
         return this.smPlaying;
     };
-    // trackIsLoaded(): boolean {
-    //    return !this.smWaiting;
-    // }
     PlayerService.prototype.getTrackInfo = function () {
         return this.smActualTrack;
     };
@@ -437,7 +406,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-// declare var soundManager: any;
 var app = (function () {
     function app(playerService, platform, statusBar, splashScreen, http, actionSheetCtrl) {
         var _this = this;
@@ -448,7 +416,6 @@ var app = (function () {
         this.http = http;
         this.actionSheetCtrl = actionSheetCtrl;
         this.rootPage = __WEBPACK_IMPORTED_MODULE_5__pages_home_home__["a" /* HomePage */];
-        // smTrackList: any;
         this.isPlaying = false;
         this.playerMode = 'info';
         this.isWaiting = false;
@@ -484,35 +451,20 @@ var app = (function () {
             { title: 'test', component: __WEBPACK_IMPORTED_MODULE_5__pages_home_home__["a" /* HomePage */] },
             { title: 'test item', component: __WEBPACK_IMPORTED_MODULE_6__pages_list_list__["a" /* ListPage */] }
         ];
-        // this.smPlaying = playerService.smPlaying;
-        // this.smPlayerMode = playerService.smPlayerMode;
-        // this.isWaiting = playerService.smWaiting;
         // get tracks api
         this.http.get('http://radioblackbrasil.com/api/tracks/random/').map(function (res) { return res.json(); }).subscribe(function (data) {
             playerService.smTrackList = data.tracks;
-            // playerService.smCreateSound(playerService.smTrackList[0].url, null);
             _this.play('firstCall');
-            // let interval = setInterval(()=>{
-            // 	// if(playerService.trackIsLoaded()){
-            // 	if(!this.isWaiting){
-            // 		// this.isWaiting = false;
-            // 		this.actualTrack = playerService.getTrackInfo();
-            // 		clearInterval(interval);
-            // 	}
-            // }, 1000);
         }, function (error) { console.warn(';( error calling tracks service'); });
     } // constructor
-    // obsStr: string = 'asa';
     app.prototype.ngOnInit = function () {
         var _this = this;
         this.subscription = this.playerService.smWaiting$.subscribe(function (item) {
             _this.isWaiting = item;
             _this.actualTrack = _this.playerService.getTrackInfo();
         });
-        // this.subscription = this.playerService.smActualTrack$.subscribe(item => this.actualTrack = item);
     };
     app.prototype.ngOnDestroy = function () {
-        // prevent memory leak when component is destroyed
         this.subscription.unsubscribe();
     };
     app.prototype.play = function (_pos) {
@@ -543,16 +495,20 @@ var app = (function () {
 }());
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_13" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["e" /* Nav */]),
-    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["e" /* Nav */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["e" /* Nav */]) === "function" && _a || Object)
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["e" /* Nav */])
 ], app.prototype, "nav", void 0);
 app = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"C:\Repos\radio-black-brasil\src\app\app.html"*/'<ion-menu [content]="content">\n\n   <ion-header>\n\n      <ion-toolbar>\n\n      <ion-title>Menu</ion-title>\n\n      </ion-toolbar>\n\n   </ion-header>\n\n   <ion-content>\n\n      <ion-list>\n\n      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">\n\n         {{p.title}}\n\n      </button>\n\n      </ion-list>\n\n   </ion-content>\n\n</ion-menu>\n\n\n\n<!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>\n\n\n\n<ion-footer>\n\n   <ion-toolbar>\n\n      <ion-grid>\n\n      <ion-row id="progress"></ion-row>\n\n      <ion-row justify-content-between>\n\n         <!-- change player mode -->\n\n         <!-- <ion-col col-12 class="txt-right">\n\n            <a *ngIf="actualTrack" (click)="presentActionSheet()">\n\n               <i class="fa fa-angle-up fa-2x"></i>\n\n            </a>\n\n         </ion-col> -->\n\n         <!-- prev -->\n\n         <ion-col *ngIf="playerMode === \'controls\'" col-5 class="txt-center">\n\n            <a (click)="play(\'prev\')">\n\n               <i class="fa fa-angle-left fa-4x"></i>\n\n            </a>\n\n         </ion-col>\n\n         <!-- play / pause -->\n\n         <ion-col col-2 class="txt-center" [hidden]="!isWaiting">\n\n            <a><i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i></a>\n\n         </ion-col>\n\n         <ion-col col-2 class="txt-center" [hidden]="isWaiting">\n\n            <a (click)="play(\'self\')">\n\n               <i class="fa fa-{{ isPlaying ? \'pause\' : \'play\' }}-circle fa-4x"></i>\n\n            </a>\n\n         </ion-col>\n\n         <!-- Track info -->\n\n         <ion-col *ngIf="playerMode === \'info\'" col-10>\n\n            <a *ngIf="actualTrack" (click)="presentActionSheet()" class="f-right"><i class="fa fa-angle-up fa-2x"></i></a>\n\n            <p class="txt-bold txt-no-break">{{ actualTrack ? actualTrack.artist : \'\' }}</p>\n\n            <p class="txt-no-break">{{ actualTrack ? actualTrack.title : \'\' }}</p>\n\n         </ion-col>\n\n         <!-- next -->\n\n         <ion-col *ngIf="playerMode === \'controls\'" col-5 class="txt-center">\n\n            <a (click)="play(\'next\')">\n\n               <i class="fa fa-angle-right fa-4x"></i>\n\n            </a>\n\n         </ion-col>\n\n      </ion-row>\n\n      </ion-grid>\n\n   </ion-toolbar>\n\n</ion-footer>'/*ion-inline-end:"C:\Repos\radio-black-brasil\src\app\app.html"*/,
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"C:\Repos\radio-black-brasil\src\app\app.html"*/'<ion-menu [content]="content">\n\n   <ion-header>\n\n      <ion-toolbar>\n\n      <ion-title>Menu</ion-title>\n\n      </ion-toolbar>\n\n   </ion-header>\n\n   <ion-content>\n\n      <ion-list>\n\n      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">\n\n         {{p.title}}\n\n      </button>\n\n      </ion-list>\n\n   </ion-content>\n\n</ion-menu>\n\n\n\n<!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>\n\n\n\n<ion-footer>\n\n   <ion-toolbar>\n\n      <ion-grid>\n\n      <ion-row id="progress"></ion-row>\n\n      <ion-row justify-content-between>\n\n         <!-- prev -->\n\n         <ion-col *ngIf="playerMode === \'controls\'" col-5 class="txt-center">\n\n            <a (click)="play(\'prev\')">\n\n               <i class="fa fa-angle-left fa-4x"></i>\n\n            </a>\n\n         </ion-col>\n\n         <!-- play / pause -->\n\n         <ion-col col-2 class="txt-center" [hidden]="!isWaiting">\n\n            <a><i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i></a>\n\n         </ion-col>\n\n         <ion-col col-2 class="txt-center" [hidden]="isWaiting">\n\n            <a (click)="play(\'self\')">\n\n               <i class="fa fa-{{ isPlaying ? \'pause\' : \'play\' }}-circle fa-4x"></i>\n\n            </a>\n\n         </ion-col>\n\n         <!-- Track info -->\n\n         <ion-col *ngIf="playerMode === \'info\'" col-10>\n\n            <a *ngIf="actualTrack" (click)="presentActionSheet()" class="f-right"><i class="fa fa-angle-up fa-2x"></i></a>\n\n            <p class="txt-bold txt-no-break">{{ actualTrack ? actualTrack.artist : \'\' }}</p>\n\n            <p class="txt-no-break">{{ actualTrack ? actualTrack.title : \'\' }}</p>\n\n         </ion-col>\n\n         <!-- next -->\n\n         <ion-col *ngIf="playerMode === \'controls\'" col-5 class="txt-center">\n\n            <a (click)="play(\'next\')">\n\n               <i class="fa fa-angle-right fa-4x"></i>\n\n            </a>\n\n         </ion-col>\n\n      </ion-row>\n\n      </ion-grid>\n\n   </ion-toolbar>\n\n</ion-footer>'/*ion-inline-end:"C:\Repos\radio-black-brasil\src\app\app.html"*/,
         providers: [__WEBPACK_IMPORTED_MODULE_8__player_service__["a" /* PlayerService */]]
     }),
-    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_8__player_service__["a" /* PlayerService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_8__player_service__["a" /* PlayerService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["h" /* Platform */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["h" /* Platform */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__ionic_native_status_bar__["a" /* StatusBar */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ionic_native_status_bar__["a" /* StatusBar */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4__ionic_native_splash_screen__["a" /* SplashScreen */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__ionic_native_splash_screen__["a" /* SplashScreen */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["a" /* ActionSheetController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["a" /* ActionSheetController */]) === "function" && _g || Object])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_8__player_service__["a" /* PlayerService */],
+        __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["h" /* Platform */],
+        __WEBPACK_IMPORTED_MODULE_3__ionic_native_status_bar__["a" /* StatusBar */],
+        __WEBPACK_IMPORTED_MODULE_4__ionic_native_splash_screen__["a" /* SplashScreen */],
+        __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */],
+        __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["a" /* ActionSheetController */]])
 ], app);
 
-var _a, _b, _c, _d, _e, _f, _g;
 //# sourceMappingURL=app.component.js.map
 
 /***/ })

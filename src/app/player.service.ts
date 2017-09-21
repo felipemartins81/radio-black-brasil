@@ -6,12 +6,6 @@ declare var soundManager: any;
 
 @Injectable()
 export class PlayerService {
-
-  // Observable string sources
-//   private strTeste = 'str service teste';
-//   private missionConfirmedSource = new Subject<string>();
-
-
 	smTrackList: any;
 	smPlaying: boolean = false;
 	smCounter: number = 0;
@@ -19,29 +13,27 @@ export class PlayerService {
 	smActualTrack: any;
 	smLastTrackId: number = 0;
 	smCreatedFromOut: boolean = false;
-	// smPlayerMode: string = 'info';
 	auxTrackList = [];
 
-	// smWaiting: boolean = true;
 	private smWaiting = new BehaviorSubject<boolean>(false);
 	smWaiting$ = this.smWaiting.asObservable();
 
    smCreateSound(_url, _type): void{ 
 		// out player
 		if(_type && typeof(_type) === 'object'){
-			// console.log(_type);
 			this.smCounter = this.smLastTrackId;
+
+			this.smActualTrack = this.smTrackList[ this.smCounter ];
 			this.smActualTrack.url = _url;
 			this.smActualTrack.smTrackId = null;
 			this.smActualTrack.artist = _type.artist;
 			this.smActualTrack.title = _type.title;
-			this.auxTrackList.push(this.smActualTrack);
+
 			this.smCreatedFromOut = true;
 		}
 		else {
 			this.smActualTrack = this.smTrackList[ this.smCounter ];
 		}
-console.warn(this.smTrackList);
 		if(!this.smActualTrack.smTrackId){
 			if(_type !== 'firstCall'){
 				this.smWaiting.next(true);
@@ -52,13 +44,17 @@ console.warn(this.smTrackList);
 				url: _url,
 				autoPlay: true,
 				onload: function() {
-					// if(_type === 'firstCall'){
-					// 	soundManager.pauseAll();
-					// }
 					setAfterCreate('onload');
 				},
-				onbufferchange: function() {
-					
+				onbufferchange: function(state) {
+					if(this.smWaiting !== undefined && state === 0){
+						console.warn('>> buffer change state 0');
+						this.smWaiting.next(false);
+					}
+					else if(this.smWaiting !== undefined && state === 1){
+						console.warn('<< buffer change state 1');
+						this.smWaiting.next(true);
+					}
 				},
 				whileplaying: function() {
 					$("#progress").css('width', ((this.position/this.duration) * 100) + '%');
@@ -67,13 +63,8 @@ console.warn(this.smTrackList);
 		}
 		let setAfterCreate = (_onType) => {
 			switch(_onType){
-				// case 'onload': this.smWaiting = false;
 				case 'onload': 
 					this.smWaiting.next(false);
-					// if(this.smCounter === 0){
-					// 	console.log(' - --  -- - - - -- - - - ');
-					// 	setTimeout(()=>{ soundManager.pauseAll() }, 500);
-					// }
 					break;
 			}
 		}
@@ -84,11 +75,10 @@ console.warn(this.smTrackList);
 		switch(_pos){
 			case 'firstCall':
 				this.smCreateSound(this.smTrackList[ this.smCounter ].url, _pos); 
-				// soundManager.play(this.smActualTrack.smTrackId);
 				this.smPlaying = false;
 				setTimeout(()=>{ soundManager.pauseAll() }, 500);
 				break;
-			// play ot pause
+			// play or pause
 			case 'self':
 				if(this.smPlaying){
 					soundManager.pauseAll();
@@ -105,17 +95,9 @@ console.warn(this.smTrackList);
 				soundManager.stop(this.smActualTrack.smTrackId);
 				soundManager.unload(this.smActualTrack.smTrackId);
 				this.smCounter--;
-// console.log(this.smTrackList);
-// 				if(this.smCreatedFromOut){
-// 					this.smActualTrack = this.smTrackList[ this.smCounter ];
-// 					soundManager.play(this.smActualTrack.smTrackId);
-// 					this.smCreatedFromOut = false;
-// 				}
-// 				else{
-					this.smCreateSound(this.smTrackList[ this.smCounter ].url, null); 
-					soundManager.play(this.smActualTrack.smTrackId);
-				// }
-				this.smPlaying = _pos === 'firstCall' ? false : true;
+				this.smActualTrack = this.smTrackList[ this.smCounter ];
+				soundManager.play(this.smTrackStr + this.smCounter.toString());
+				this.smPlaying = true;
 				break;
 			case 'next':
 				if(this.smCounter === this.smTrackList.length - 1) return; // last
@@ -124,28 +106,13 @@ console.warn(this.smTrackList);
 				this.smCounter++; 
 				this.smCreateSound(this.smTrackList[ this.smCounter ].url, null); 
 				soundManager.play(this.smActualTrack.smTrackId);
-				this.smPlaying = _pos === 'firstCall' ? false : true;
+				this.smPlaying = true;
 				break;
 		}
       return this.smPlaying;
 	}
 
-   // trackIsLoaded(): boolean {
-   //    return !this.smWaiting;
-   // }
-
    getTrackInfo(): object {
       return this.smActualTrack;
    }
-
-	// smChangePlayerMode(): void {
-	// 	switch(this.smPlayerMode){
-	// 		case 'controls':
-	// 			this.smPlayerMode = 'info';
-	// 			break;
-	// 		case 'info':
-	// 			this.smPlayerMode = 'controls';
-	// 			break;
-	// 	}
-	// }
 }
