@@ -5,6 +5,7 @@ import { ActionSheetController } from 'ionic-angular';
 import { StatusBar } 				from '@ionic-native/status-bar';
 import { SplashScreen } 			from '@ionic-native/splash-screen';
 import { HomePage } 					from '../pages/home/home';
+import { ArtistsPage }  			from '../pages/artists/artists';
 import { ListPage } 					from '../pages/list/list';
 import { Subscription } 			from 'rxjs/Subscription';
 import 'rxjs/add/operator/map';
@@ -39,7 +40,8 @@ export class app {
 
 		// menu itens
 		this.pages = [
-			{ title: 'test', component: HomePage },
+			{ title: 'Destaques', component: HomePage },
+			{ title: 'Artistas', component: ArtistsPage },
 			{ title: 'test item', component: ListPage }
 		];
 

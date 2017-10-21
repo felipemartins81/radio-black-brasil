@@ -1,0 +1,103 @@
+<ion-header>
+  <ion-navbar>
+     <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+     </button>
+     <ion-title>{{ artistObj.name ? artistObj.name : 'Artistas' }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content *ngIf="artistObj.name" class="card-background-image">
+  <ion-card class="card-bg-image bg-profile" style="padding-top:200px" 
+    [ngStyle]="{'background-image': 'url(http://radioblackbrasil.com/files/photos/'+ artistObj.photo +')'}">
+    <ion-card-content></ion-card-content>
+    <ion-row no-padding><ion-col><ion-card-title class="txt-no-break">&nbsp;</ion-card-title></ion-col></ion-row>
+  </ion-card>
+</ion-content>
+
+<ion-content padding class="card-background-image">
+
+  <ion-card class="card-bg-image" 
+    *ngFor="let artist of artistListSplited; let i = index" 
+    [ngStyle]="{'background-image': 'url(http://radioblackbrasil.com/files/photos/'+ artist.photo +')'}"
+    (click)="itemTapped($event, artist)">
+     <!-- <img *ngIf="track.capa" src="http://radioblackbrasil.com/files/albums/{{ track.capa }}"/> -->
+     <!-- <div class="img" [ngStyle]="{'background': 'url(http://radioblackbrasil.com/files/albums/'+ track.capa +')'}"></div> -->
+     <ion-card-content>
+        <!-- <ion-card-title class="txt-no-break">{{ artist.name }}</ion-card-title> -->
+        <!-- <p class="txt-bold txt-no-break"> <i class="fa fa-music"></i> &nbsp; {{ artist.title }}</p>
+        <p class="txt-italic txt-no-break">{{ artist.genero }}</p> -->
+     </ion-card-content>
+     <ion-row no-padding>
+        <ion-col>
+            <ion-card-title class="txt-no-break">{{ artist.name }}</ion-card-title>
+        </ion-col>
+        <!-- <ion-col text-center>
+           <button ion-button clear small color="danger" icon-start>
+              <ion-icon name='musical-notes'></ion-icon>
+              Listen
+           </button>
+        </ion-col>
+        <ion-col text-right>
+           <button ion-button clear icon-start (click)="play('self', i, track.artist, track.title)">
+              <ion-icon name='play'></ion-icon> Ouvir
+           </button>
+        </ion-col> -->
+     </ion-row>
+  </ion-card>
+
+  <!-- artist profile -->
+  <ion-grid *ngIf="artistObj.name" style="margin-top:180px; background:#242424; opacity:0.95">
+    <ion-row>
+      <ion-col>
+        <!-- <h1>{{ artistObj.name }}</h1> -->
+        <ion-item style="opacity:0.6">{{ artistObj.genre1 }}</ion-item>
+        <p style="opacity:0.6; margin:10px 0" [innerHTML]="artistObj.content"></p>
+        <ion-list>
+          <button ion-item *ngIf="artistObj.email">
+            <div class="item-note" item-left><i class="fa fa-envelope"></i></div>
+            {{ artistObj.email }}
+            <div class="item-note" item-right>&raquo;</div>
+          </button>
+          <button ion-item *ngIf="artistObj.facebook_url">
+            <div class="item-note" item-left><i class="fa fa-facebook"></i></div>
+            {{ artistObj.facebook_url }}
+            <div class="item-note" item-right>&raquo;</div>
+          </button>
+          <button ion-item *ngIf="artistObj.instagram_id">
+            <div class="item-note" item-left><i class="fa fa-instagram"></i></div>
+            {{ artistObj.instagram_id }}
+            <div class="item-note" item-right>&raquo;</div>
+          </button>
+          <button ion-item *ngIf="artistObj.twitter_url">
+            <div class="item-note" item-left><i class="fa fa-twitter"></i></div>
+            {{ artistObj.twitter_url }}
+            <div class="item-note" item-right>&raquo;</div>
+          </button>
+          <button ion-item *ngIf="artistObj.soundcloud_url">
+            <div class="item-note" item-left><i class="fa fa-soundcloud"></i></div>
+            {{ artistObj.soundcloud_url }}
+            <div class="item-note" item-right>&raquo;</div>
+          </button>
+          <button ion-item *ngIf="artistObj.website_url">
+            <div class="item-note" item-left><i class="fa fa-globe"></i></div>
+            {{ artistObj.website_url }}
+            <div class="item-note" item-right>&raquo;</div>
+          </button>
+          <button ion-item *ngIf="artistObj.youtube_url">
+            <div class="item-note" item-left><i class="fa fa-youtube"></i></div>
+            {{ artistObj.youtube_url }}
+            <div class="item-note" item-right>&raquo;</div>
+          </button>
+        </ion-list>
+      </ion-col>  
+    </ion-row>
+  </ion-grid>
+
+  <!-- behind player space -->
+  <br>
+  <br>
+  <br>
+  <br>
+  
+</ion-content>
