@@ -42,7 +42,7 @@ export class app {
 		this.pages = [
 			{ title: 'Destaques', component: HomePage },
 			{ title: 'Artistas', component: ArtistsPage },
-			{ title: 'test item', component: ListPage }
+			{ title: 'Musicas', component: ListPage }
 		];
 
 		// get tracks api
@@ -53,7 +53,7 @@ export class app {
 			},
 			error => { console.warn(';( error calling tracks service'); }
 		);
-	} // constructor
+	}
 	
 	presentActionSheet = () => {
 		let actionSheet = this.actionSheetCtrl.create({
@@ -84,9 +84,14 @@ export class app {
 
 	ngOnInit() {
 		this.subscription = this.playerService.smWaiting$.subscribe(
-			(item) => { 
+			(item) => {
 				this.isWaiting = item;
 				this.actualTrack = this.playerService.getTrackInfo();
+			}
+		);
+		this.subscription = this.playerService.smPlaying$.subscribe(
+			(item) => { 
+				this.isPlaying = item;
 			}
 		);
 	}

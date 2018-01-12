@@ -7,7 +7,6 @@ declare var soundManager: any;
 @Injectable()
 export class PlayerService {
 	smTrackList: any;
-	smPlaying: boolean = false;
 	smCounter: number = 0;
 	smTrackStr: string = 'track_';
 	smActualTrack: any;
@@ -17,6 +16,9 @@ export class PlayerService {
 
 	private smWaiting = new BehaviorSubject<boolean>(false);
 	smWaiting$ = this.smWaiting.asObservable();
+
+	private smPlaying = new BehaviorSubject<boolean>(false);
+	smPlaying$ = this.smPlaying.asObservable();
 
    smCreateSound(_url, _type): void{ 
 		// out player
@@ -28,7 +30,7 @@ export class PlayerService {
 			this.smActualTrack.smTrackId = null;
 			this.smActualTrack.artist = _type.artist;
 			this.smActualTrack.title = _type.title;
-
+			this.smPlaying.next(true);
 			this.smCreatedFromOut = true;
 		}
 		else {
@@ -75,18 +77,18 @@ export class PlayerService {
 		switch(_pos){
 			case 'firstCall':
 				this.smCreateSound(this.smTrackList[ this.smCounter ].url, _pos); 
-				this.smPlaying = false;
+				this.smPlaying.next(false);
 				setTimeout(()=>{ soundManager.pauseAll() }, 500);
 				break;
 			// play or pause
 			case 'self':
-				if(this.smPlaying){
+				if(this.smPlaying.value){
 					soundManager.pauseAll();
-					this.smPlaying = false;
+					this.smPlaying.next(false);
 				}
 				else{
 					soundManager.resumeAll();
-					this.smPlaying = true;
+					this.smPlaying.next(true);
 				}
 				break;
 			// next or prev
@@ -97,7 +99,7 @@ export class PlayerService {
 				this.smCounter--;
 				this.smActualTrack = this.smTrackList[ this.smCounter ];
 				soundManager.play(this.smTrackStr + this.smCounter.toString());
-				this.smPlaying = true;
+				this.smPlaying.next(true);
 				break;
 			case 'next':
 				if(this.smCounter === this.smTrackList.length - 1) return; // last
@@ -106,10 +108,10 @@ export class PlayerService {
 				this.smCounter++; 
 				this.smCreateSound(this.smTrackList[ this.smCounter ].url, null); 
 				soundManager.play(this.smActualTrack.smTrackId);
-				this.smPlaying = true;
+				this.smPlaying.next(true);
 				break;
 		}
-      return this.smPlaying;
+	  return this.smPlaying.value;
 	}
 
    getTrackInfo(): object {

@@ -28423,3 +28423,11 @@ ion-navbar.toolbar {
   font-size: 1.5em;
   z-index: 9;
 }
+
+page-list .fa-play {
+  margin: 10px;
+}
+
+page-list #btnLoad {
+  margin: 0 0 100px 0 !important;
+}

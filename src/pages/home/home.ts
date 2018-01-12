@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Http } from '@angular/http';
+import { LoadingController } from 'ionic-angular';
+import { PlayerService } from '../../app/player.service';
 import 'rxjs/add/operator/map';
 
-import { PlayerService } from '../../app/player.service';
 
 @Component({
    selector: 'page-home',
@@ -12,19 +13,24 @@ import { PlayerService } from '../../app/player.service';
 export class HomePage {
    trackList: any = [];
    trackListSplited: any = [];
+   loader: any;
 
-   constructor(public navCtrl: NavController, public http: Http, private playerService: PlayerService) {
+   constructor(public navCtrl: NavController, public http: Http, private playerService: PlayerService, public loadingCtrl: LoadingController) {
+
+    this.loader = this.loadingCtrl.create({ content: "Carregando..." });
+    this.loader.present();
 
       // get tracks api
       this.http.get('http://radioblackbrasil.com/api/tracks/latest/').map(res => res.json()).subscribe(
          data => {
             this.trackList = data.tracks;
-            this.trackList.some((e, i) => {
+            this.trackList.forEach((e, i) => {
                if(i < 10){
                   this.trackListSplited.push(e);
                }
                else { return true; }
             });
+            setTimeout(() => { this.loader.dismiss() }, 500);
          },
          error => { console.warn(';( error calling tracks service'); }
       );

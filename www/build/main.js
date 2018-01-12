@@ -4,11 +4,7 @@ webpackJsonp([0],{
 /***/ (function(module, exports) {
 
 function webpackEmptyAsyncContext(req) {
-	// Here Promise.resolve().then() is used instead of new Promise() to prevent
-	// uncatched exception popping up in devtools
-	return Promise.resolve().then(function() {
-		throw new Error("Cannot find module '" + req + "'.");
-	});
+	return new Promise(function(resolve, reject) { reject(new Error("Cannot find module '" + req + "'.")); });
 }
 webpackEmptyAsyncContext.keys = function() { return []; };
 webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
@@ -21,11 +17,7 @@ webpackEmptyAsyncContext.id = 109;
 /***/ (function(module, exports) {
 
 function webpackEmptyAsyncContext(req) {
-	// Here Promise.resolve().then() is used instead of new Promise() to prevent
-	// uncatched exception popping up in devtools
-	return Promise.resolve().then(function() {
-		throw new Error("Cannot find module '" + req + "'.");
-	});
+	return new Promise(function(resolve, reject) { reject(new Error("Cannot find module '" + req + "'.")); });
 }
 webpackEmptyAsyncContext.keys = function() { return []; };
 webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
@@ -41,10 +33,10 @@ webpackEmptyAsyncContext.id = 151;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(30);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__ = __webpack_require__(99);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_player_service__ = __webpack_require__(196);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_player_service__ = __webpack_require__(196);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_map__ = __webpack_require__(99);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_map__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -59,18 +51,22 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var HomePage = (function () {
-    function HomePage(navCtrl, http, playerService) {
+    function HomePage(navCtrl, http, playerService, loadingCtrl) {
         var _this = this;
         this.navCtrl = navCtrl;
         this.http = http;
         this.playerService = playerService;
+        this.loadingCtrl = loadingCtrl;
         this.trackList = [];
         this.trackListSplited = [];
+        this.loader = this.loadingCtrl.create({ content: "Carregando...", spinner: 'dots' });
+        this.loader.present();
         // get tracks api
         this.http.get('http://radioblackbrasil.com/api/tracks/latest/').map(function (res) { return res.json(); }).subscribe(function (data) {
             _this.trackList = data.tracks;
-            _this.trackList.some(function (e, i) {
+            _this.trackList.forEach(function (e, i) {
                 if (i < 10) {
                     _this.trackListSplited.push(e);
                 }
@@ -78,6 +74,7 @@ var HomePage = (function () {
                     return true;
                 }
             });
+            setTimeout(function () { _this.loader.dismiss(); }, 500);
         }, function (error) { console.warn(';( error calling tracks service'); });
     }
     HomePage.prototype.play = function (_pos, _index, _artist, _title) {
@@ -93,11 +90,12 @@ var HomePage = (function () {
 }());
 HomePage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-home',template:/*ion-inline-start:"C:\Repos\radio-black-brasil\src\pages\home\home.html"*/'<ion-header>\n\n   <ion-navbar>\n\n      <button ion-button menuToggle>\n\n         <ion-icon name="menu"></ion-icon>\n\n      </button>\n\n      <ion-title>Destaques</ion-title>\n\n   </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding>\n\n\n\n   <ion-card img-mini *ngFor="let track of trackListSplited; let i = index">\n\n      <img *ngIf="track.capa" src="http://radioblackbrasil.com/files/albums/{{ track.capa }}"/>\n\n      <ion-card-content>\n\n         <ion-card-title class="txt-no-break">{{ track.artist }}</ion-card-title>\n\n         <p class="txt-bold txt-no-break"> <i class="fa fa-music"></i> &nbsp; {{ track.title }}</p>\n\n         <p class="txt-italic txt-no-break">{{ track.genero }}</p>\n\n      </ion-card-content>\n\n      <ion-row no-padding>\n\n         <ion-col>\n\n            <button ion-button clear small color="danger" icon-start>\n\n               <!-- <ion-icon name=\'share-alt\'></ion-icon>\n\n               Share -->\n\n            </button>\n\n         </ion-col>\n\n         <ion-col text-center>\n\n            <button ion-button clear small color="danger" icon-start>\n\n               <!-- <ion-icon name=\'musical-notes\'></ion-icon>\n\n               Listen -->\n\n            </button>\n\n         </ion-col>\n\n         <ion-col text-right>\n\n            <button ion-button clear icon-start (click)="play(\'self\', i, track.artist, track.title)">\n\n               <ion-icon name=\'play\'></ion-icon> Ouvir\n\n            </button>\n\n         </ion-col>\n\n      </ion-row>\n\n   </ion-card>\n\n\n\n   <!-- behind player space -->\n\n   <br>\n\n   <br>\n\n   <br>\n\n   <br>\n\n   \n\n</ion-content>'/*ion-inline-end:"C:\Repos\radio-black-brasil\src\pages\home\home.html"*/
+        selector: 'page-home',template:/*ion-inline-start:"/Users/marlenejej/Documents/Felipe/radio-black-brasil/radio-black-brasil/src/pages/home/home.html"*/'<ion-header>\n   <ion-navbar>\n      <button ion-button menuToggle>\n         <ion-icon name="menu"></ion-icon>\n      </button>\n      <ion-title>Destaques</ion-title>\n   </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n   <ion-card img-mini *ngFor="let track of trackListSplited; let i = index">\n      <img *ngIf="track.capa" src="http://radioblackbrasil.com/files/albums/{{ track.capa }}"/>\n      <ion-card-content>\n         <ion-card-title class="txt-no-break">{{ track.artist }}</ion-card-title>\n         <p class="txt-bold txt-no-break"> <i class="fa fa-music"></i> &nbsp; {{ track.title }}</p>\n         <p class="txt-italic txt-no-break">{{ track.genero }}</p>\n      </ion-card-content>\n      <ion-row no-padding>\n         <ion-col>\n            <button ion-button clear small color="danger" icon-start>\n               <!-- <ion-icon name=\'share-alt\'></ion-icon>\n               Share -->\n            </button>\n         </ion-col>\n         <ion-col text-center>\n            <button ion-button clear small color="danger" icon-start>\n               <!-- <ion-icon name=\'musical-notes\'></ion-icon>\n               Listen -->\n            </button>\n         </ion-col>\n         <ion-col text-right>\n            <button ion-button clear icon-start (click)="play(\'self\', i, track.artist, track.title)">\n               <ion-icon name=\'play\'></ion-icon> Ouvir\n            </button>\n         </ion-col>\n      </ion-row>\n   </ion-card>\n\n   <!-- behind player space -->\n   <br>\n   <br>\n   <br>\n   <br>\n   \n</ion-content>'/*ion-inline-end:"/Users/marlenejej/Documents/Felipe/radio-black-brasil/radio-black-brasil/src/pages/home/home.html"*/
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */], __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* Http */], __WEBPACK_IMPORTED_MODULE_4__app_player_service__["a" /* PlayerService */]])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* Http */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__app_player_service__["a" /* PlayerService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__app_player_service__["a" /* PlayerService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* LoadingController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* LoadingController */]) === "function" && _d || Object])
 ], HomePage);
 
+var _a, _b, _c, _d;
 //# sourceMappingURL=home.js.map
 
 /***/ }),
@@ -123,7 +121,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 var PlayerService = (function () {
     function PlayerService() {
-        this.smPlaying = false;
         this.smCounter = 0;
         this.smTrackStr = 'track_';
         this.smLastTrackId = 0;
@@ -131,6 +128,8 @@ var PlayerService = (function () {
         this.auxTrackList = [];
         this.smWaiting = new __WEBPACK_IMPORTED_MODULE_1_rxjs_BehaviorSubject__["BehaviorSubject"](false);
         this.smWaiting$ = this.smWaiting.asObservable();
+        this.smPlaying = new __WEBPACK_IMPORTED_MODULE_1_rxjs_BehaviorSubject__["BehaviorSubject"](false);
+        this.smPlaying$ = this.smPlaying.asObservable();
     }
     PlayerService.prototype.smCreateSound = function (_url, _type) {
         var _this = this;
@@ -142,6 +141,7 @@ var PlayerService = (function () {
             this.smActualTrack.smTrackId = null;
             this.smActualTrack.artist = _type.artist;
             this.smActualTrack.title = _type.title;
+            this.smPlaying.next(true);
             this.smCreatedFromOut = true;
         }
         else {
@@ -187,18 +187,18 @@ var PlayerService = (function () {
         switch (_pos) {
             case 'firstCall':
                 this.smCreateSound(this.smTrackList[this.smCounter].url, _pos);
-                this.smPlaying = false;
+                this.smPlaying.next(false);
                 setTimeout(function () { soundManager.pauseAll(); }, 500);
                 break;
             // play or pause
             case 'self':
-                if (this.smPlaying) {
+                if (this.smPlaying.value) {
                     soundManager.pauseAll();
-                    this.smPlaying = false;
+                    this.smPlaying.next(false);
                 }
                 else {
                     soundManager.resumeAll();
-                    this.smPlaying = true;
+                    this.smPlaying.next(true);
                 }
                 break;
             // next or prev
@@ -210,7 +210,7 @@ var PlayerService = (function () {
                 this.smCounter--;
                 this.smActualTrack = this.smTrackList[this.smCounter];
                 soundManager.play(this.smTrackStr + this.smCounter.toString());
-                this.smPlaying = true;
+                this.smPlaying.next(true);
                 break;
             case 'next':
                 if (this.smCounter === this.smTrackList.length - 1)
@@ -220,10 +220,10 @@ var PlayerService = (function () {
                 this.smCounter++;
                 this.smCreateSound(this.smTrackList[this.smCounter].url, null);
                 soundManager.play(this.smActualTrack.smTrackId);
-                this.smPlaying = true;
+                this.smPlaying.next(true);
                 break;
         }
-        return this.smPlaying;
+        return this.smPlaying.value;
     };
     PlayerService.prototype.getTrackInfo = function () {
         return this.smActualTrack;
@@ -245,7 +245,7 @@ PlayerService = __decorate([
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ArtistsPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(30);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__ = __webpack_require__(99);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -308,9 +308,9 @@ var ArtistsPage = ArtistsPage_1 = (function () {
 }());
 ArtistsPage = ArtistsPage_1 = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-artists',template:/*ion-inline-start:"C:\Repos\radio-black-brasil\src\pages\artists\artists.html"*/'<ion-header>\n  <ion-navbar>\n     <button ion-button menuToggle>\n        <ion-icon name="menu"></ion-icon>\n     </button>\n     <ion-title>{{ artistObj.name ? artistObj.name : \'Artistas\' }}</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content *ngIf="artistObj.name" class="card-background-image">\n  <ion-card class="card-bg-image bg-profile" style="padding-top:200px" \n    [ngStyle]="{\'background-image\': \'url(http://radioblackbrasil.com/files/photos/\'+ artistObj.photo +\')\'}">\n    <ion-card-content></ion-card-content>\n    <ion-row no-padding><ion-col><ion-card-title class="txt-no-break">&nbsp;</ion-card-title></ion-col></ion-row>\n  </ion-card>\n</ion-content>\n\n<ion-content padding class="card-background-image">\n\n  <ion-card class="card-bg-image" \n    *ngFor="let artist of artistListSplited; let i = index" \n    [ngStyle]="{\'background-image\': \'url(http://radioblackbrasil.com/files/photos/\'+ artist.photo +\')\'}"\n    (click)="itemTapped($event, artist)">\n     <!-- <img *ngIf="track.capa" src="http://radioblackbrasil.com/files/albums/{{ track.capa }}"/> -->\n     <!-- <div class="img" [ngStyle]="{\'background\': \'url(http://radioblackbrasil.com/files/albums/\'+ track.capa +\')\'}"></div> -->\n     <ion-card-content>\n        <!-- <ion-card-title class="txt-no-break">{{ artist.name }}</ion-card-title> -->\n        <!-- <p class="txt-bold txt-no-break"> <i class="fa fa-music"></i> &nbsp; {{ artist.title }}</p>\n        <p class="txt-italic txt-no-break">{{ artist.genero }}</p> -->\n     </ion-card-content>\n     <ion-row no-padding>\n        <ion-col>\n            <ion-card-title class="txt-no-break">{{ artist.name }}</ion-card-title>\n        </ion-col>\n        <!-- <ion-col text-center>\n           <button ion-button clear small color="danger" icon-start>\n              <ion-icon name=\'musical-notes\'></ion-icon>\n              Listen\n           </button>\n        </ion-col>\n        <ion-col text-right>\n           <button ion-button clear icon-start (click)="play(\'self\', i, track.artist, track.title)">\n              <ion-icon name=\'play\'></ion-icon> Ouvir\n           </button>\n        </ion-col> -->\n     </ion-row>\n  </ion-card>\n\n  <!-- artist profile -->\n  <ion-grid *ngIf="artistObj.name" style="margin-top:180px; background:#242424; opacity:0.95">\n    <ion-row>\n      <ion-col>\n        <!-- <h1>{{ artistObj.name }}</h1> -->\n        <ion-item style="opacity:0.6">{{ artistObj.genre1 }}</ion-item>\n        <p style="opacity:0.6; margin:10px 0" [innerHTML]="artistObj.content"></p>\n        <ion-list>\n          <button ion-item *ngIf="artistObj.email">\n            <div class="item-note" item-left><i class="fa fa-envelope"></i></div>\n            {{ artistObj.email }}\n            <div class="item-note" item-right>&raquo;</div>\n          </button>\n          <button ion-item *ngIf="artistObj.facebook_url">\n            <div class="item-note" item-left><i class="fa fa-facebook"></i></div>\n            {{ artistObj.facebook_url }}\n            <div class="item-note" item-right>&raquo;</div>\n          </button>\n          <button ion-item *ngIf="artistObj.instagram_id">\n            <div class="item-note" item-left><i class="fa fa-instagram"></i></div>\n            {{ artistObj.instagram_id }}\n            <div class="item-note" item-right>&raquo;</div>\n          </button>\n          <button ion-item *ngIf="artistObj.twitter_url">\n            <div class="item-note" item-left><i class="fa fa-twitter"></i></div>\n            {{ artistObj.twitter_url }}\n            <div class="item-note" item-right>&raquo;</div>\n          </button>\n          <button ion-item *ngIf="artistObj.soundcloud_url">\n            <div class="item-note" item-left><i class="fa fa-soundcloud"></i></div>\n            {{ artistObj.soundcloud_url }}\n            <div class="item-note" item-right>&raquo;</div>\n          </button>\n          <button ion-item *ngIf="artistObj.website_url">\n            <div class="item-note" item-left><i class="fa fa-globe"></i></div>\n            {{ artistObj.website_url }}\n            <div class="item-note" item-right>&raquo;</div>\n          </button>\n          <button ion-item *ngIf="artistObj.youtube_url">\n            <div class="item-note" item-left><i class="fa fa-youtube"></i></div>\n            {{ artistObj.youtube_url }}\n            <div class="item-note" item-right>&raquo;</div>\n          </button>\n        </ion-list>\n      </ion-col>  \n    </ion-row>\n  </ion-grid>\n\n  <!-- behind player space -->\n  <br>\n  <br>\n  <br>\n  <br>\n  \n</ion-content>'/*ion-inline-end:"C:\Repos\radio-black-brasil\src\pages\artists\artists.html"*/
+        selector: 'page-artists',template:/*ion-inline-start:"/Users/marlenejej/Documents/Felipe/radio-black-brasil/radio-black-brasil/src/pages/artists/artists.html"*/'<ion-header>\n  <ion-navbar>\n     <button ion-button menuToggle>\n        <ion-icon name="menu"></ion-icon>\n     </button>\n     <ion-title>{{ artistObj.name ? artistObj.name : \'Artistas\' }}</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content *ngIf="artistObj.name" class="card-background-image">\n  <ion-card class="card-bg-image bg-profile" style="padding-top:200px" \n    [ngStyle]="{\'background-image\': \'url(http://radioblackbrasil.com/files/photos/\'+ artistObj.photo +\')\'}">\n    <ion-card-content></ion-card-content>\n    <ion-row no-padding><ion-col><ion-card-title class="txt-no-break">&nbsp;</ion-card-title></ion-col></ion-row>\n  </ion-card>\n</ion-content>\n\n<ion-content padding class="card-background-image">\n\n  <ion-card class="card-bg-image" \n    *ngFor="let artist of artistListSplited; let i = index" \n    [ngStyle]="{\'background-image\': \'url(http://radioblackbrasil.com/files/photos/\'+ artist.photo +\')\'}"\n    (click)="itemTapped($event, artist)">\n     <!-- <img *ngIf="track.capa" src="http://radioblackbrasil.com/files/albums/{{ track.capa }}"/> -->\n     <!-- <div class="img" [ngStyle]="{\'background\': \'url(http://radioblackbrasil.com/files/albums/\'+ track.capa +\')\'}"></div> -->\n     <ion-card-content>\n        <!-- <ion-card-title class="txt-no-break">{{ artist.name }}</ion-card-title> -->\n        <!-- <p class="txt-bold txt-no-break"> <i class="fa fa-music"></i> &nbsp; {{ artist.title }}</p>\n        <p class="txt-italic txt-no-break">{{ artist.genero }}</p> -->\n     </ion-card-content>\n     <ion-row no-padding>\n        <ion-col>\n            <ion-card-title class="txt-no-break">{{ artist.name }}</ion-card-title>\n        </ion-col>\n        <!-- <ion-col text-center>\n           <button ion-button clear small color="danger" icon-start>\n              <ion-icon name=\'musical-notes\'></ion-icon>\n              Listen\n           </button>\n        </ion-col>\n        <ion-col text-right>\n           <button ion-button clear icon-start (click)="play(\'self\', i, track.artist, track.title)">\n              <ion-icon name=\'play\'></ion-icon> Ouvir\n           </button>\n        </ion-col> -->\n     </ion-row>\n  </ion-card>\n\n  <!-- artist profile -->\n  <ion-grid *ngIf="artistObj.name" style="margin-top:180px; background:#242424; opacity:0.95">\n    <ion-row>\n      <ion-col>\n        <!-- <h1>{{ artistObj.name }}</h1> -->\n        <ion-item style="opacity:0.6">{{ artistObj.genre1 }}</ion-item>\n        <p style="opacity:0.6; margin:10px 0" [innerHTML]="artistObj.content"></p>\n        <ion-list>\n          <button ion-item *ngIf="artistObj.email">\n            <div class="item-note" item-left><i class="fa fa-envelope"></i></div>\n            {{ artistObj.email }}\n            <div class="item-note" item-right>&raquo;</div>\n          </button>\n          <button ion-item *ngIf="artistObj.facebook_url">\n            <div class="item-note" item-left><i class="fa fa-facebook"></i></div>\n            {{ artistObj.facebook_url }}\n            <div class="item-note" item-right>&raquo;</div>\n          </button>\n          <button ion-item *ngIf="artistObj.instagram_id">\n            <div class="item-note" item-left><i class="fa fa-instagram"></i></div>\n            {{ artistObj.instagram_id }}\n            <div class="item-note" item-right>&raquo;</div>\n          </button>\n          <button ion-item *ngIf="artistObj.twitter_url">\n            <div class="item-note" item-left><i class="fa fa-twitter"></i></div>\n            {{ artistObj.twitter_url }}\n            <div class="item-note" item-right>&raquo;</div>\n          </button>\n          <button ion-item *ngIf="artistObj.soundcloud_url">\n            <div class="item-note" item-left><i class="fa fa-soundcloud"></i></div>\n            {{ artistObj.soundcloud_url }}\n            <div class="item-note" item-right>&raquo;</div>\n          </button>\n          <button ion-item *ngIf="artistObj.website_url">\n            <div class="item-note" item-left><i class="fa fa-globe"></i></div>\n            {{ artistObj.website_url }}\n            <div class="item-note" item-right>&raquo;</div>\n          </button>\n          <button ion-item *ngIf="artistObj.youtube_url">\n            <div class="item-note" item-left><i class="fa fa-youtube"></i></div>\n            {{ artistObj.youtube_url }}\n            <div class="item-note" item-right>&raquo;</div>\n          </button>\n        </ion-list>\n      </ion-col>  \n    </ion-row>\n  </ion-grid>\n\n  <!-- behind player space -->\n  <br>\n  <br>\n  <br>\n  <br>\n  \n</ion-content>'/*ion-inline-end:"/Users/marlenejej/Documents/Felipe/radio-black-brasil/radio-black-brasil/src/pages/artists/artists.html"*/
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */], __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* Http */]])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */], __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* Http */]])
 ], ArtistsPage);
 
 var ArtistsPage_1;
@@ -325,6 +325,8 @@ var ArtistsPage_1;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ListPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_player_service__ = __webpack_require__(196);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -336,40 +338,77 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
-var ListPage = ListPage_1 = (function () {
-    function ListPage(navCtrl, navParams) {
+
+
+
+var ListPage = (function () {
+    function ListPage(navCtrl, playerService, http, navParams, loadingCtrl) {
         this.navCtrl = navCtrl;
+        this.playerService = playerService;
+        this.http = http;
         this.navParams = navParams;
-        // If we navigated to this page, we will have an item available as a nav param
-        this.selectedItem = navParams.get('item');
-        // Let's populate this page with some filler content for funzies
-        this.icons = ['flask', 'wifi', 'beer', 'football', 'basketball', 'paper-plane',
-            'american-football', 'boat', 'bluetooth', 'build'];
-        this.items = [];
-        for (var i = 1; i < 11; i++) {
-            this.items.push({
-                title: 'Item ' + i,
-                note: 'This is item #' + i,
-                icon: this.icons[Math.floor(Math.random() * this.icons.length)]
+        this.loadingCtrl = loadingCtrl;
+        this.trackList = [];
+        this.trackListSplited = [];
+        this.tracksInList = 0;
+        this.loader = this.loadingCtrl.create({ content: "Carregando..." });
+        this.loader.present();
+        this.getTracks();
+    }
+    ListPage.prototype.getTracks = function () {
+        var _this = this;
+        this.http.get('http://radioblackbrasil.com/api/tracks/random/').map(function (res) { return res.json(); }).subscribe(function (data) {
+            _this.trackList = data.tracks;
+            _this.showTracks();
+        }, function (error) { console.warn(';( error calling tracks service'); });
+    };
+    ListPage.prototype.showTracks = function () {
+        var _this = this;
+        this.loader.present();
+        var amountToAdd = 20;
+        this.trackList.forEach(function (e, i) {
+            if (i >= _this.tracksInList && i < _this.tracksInList + amountToAdd) {
+                _this.trackListSplited.push(e);
+            }
+            else {
+                return true;
+            }
+        });
+        this.tracksInList += amountToAdd;
+        setTimeout(function () { _this.loader.dismiss(); }, 500);
+    };
+    ListPage.prototype.getItems = function (ev) {
+        var txt = ev.target.value;
+        if (txt && txt.trim() != '') {
+            this.trackListSplited = this.trackList.filter(function (item) {
+                return (item.artist.toLowerCase().indexOf(txt.toLowerCase()) > -1 ||
+                    item.title.toLowerCase().indexOf(txt.toLowerCase()) > -1);
             });
         }
-    }
-    ListPage.prototype.itemTapped = function (event, item) {
-        // That's right, we're pushing to ourselves!
-        this.navCtrl.push(ListPage_1, {
-            item: item
-        });
+        else {
+            this.tracksInList = 0;
+            this.showTracks();
+        }
+    };
+    ListPage.prototype.play = function (_pos, _id, _artist, _title) {
+        var newTrack = {
+            artist: _artist,
+            title: _title,
+            pos: _pos
+        };
+        var track = this.trackList.find(function (e) { return e.id === _id; });
+        this.playerService.smCreateSound(track.url, newTrack);
     };
     return ListPage;
 }());
-ListPage = ListPage_1 = __decorate([
+ListPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-list',template:/*ion-inline-start:"C:\Repos\radio-black-brasil\src\pages\list\list.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <button ion-button menuToggle>\n\n      <ion-icon name="menu"></ion-icon>\n\n    </button>\n\n    <ion-title>List</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content>\n\n  <ion-list>\n\n    <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">\n\n      <ion-icon [name]="item.icon" item-left></ion-icon>\n\n      {{item.title}}\n\n      <div class="item-note" item-right>\n\n        {{item.note}}\n\n      </div>\n\n    </button>\n\n  </ion-list>\n\n  <div *ngIf="selectedItem" padding>\n\n    You navigated here from <b>{{selectedItem.title}}</b>\n\n  </div>\n\n</ion-content>\n\n'/*ion-inline-end:"C:\Repos\radio-black-brasil\src\pages\list\list.html"*/
+        selector: 'page-list',template:/*ion-inline-start:"/Users/marlenejej/Documents/Felipe/radio-black-brasil/radio-black-brasil/src/pages/list/list.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Musicas</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content>\n  <ion-searchbar (ionInput)="getItems($event)" placeholder="Buscar musicas"></ion-searchbar>\n  <ion-list>\n    <ion-item *ngFor="let track of trackListSplited; let i = index" \n      (click)="play(\'self\', track.id, track.artist, track.title)">\n      <i class="fa fa-play pull-right"></i>\n      <strong [innerText]="track.artist"></strong>\n      <br/>\n      {{ track.title }}\n    </ion-item>\n  </ion-list>\n  <button id="btnLoad" ion-button color="dark" block round\n    (click)="showTracks()">\n    carregar mais\n  </button>\n</ion-content>\n'/*ion-inline-end:"/Users/marlenejej/Documents/Felipe/radio-black-brasil/radio-black-brasil/src/pages/list/list.html"*/
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */]])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__app_player_service__["a" /* PlayerService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__app_player_service__["a" /* PlayerService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* Http */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* LoadingController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* LoadingController */]) === "function" && _e || Object])
 ], ListPage);
 
-var ListPage_1;
+var _a, _b, _c, _d, _e;
 //# sourceMappingURL=list.js.map
 
 /***/ }),
@@ -394,7 +433,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_component__ = __webpack_require__(257);
@@ -462,7 +501,7 @@ AppModule = __decorate([
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return app; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_status_bar__ = __webpack_require__(191);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_splash_screen__ = __webpack_require__(194);
@@ -536,19 +575,22 @@ var app = (function () {
         this.pages = [
             { title: 'Destaques', component: __WEBPACK_IMPORTED_MODULE_5__pages_home_home__["a" /* HomePage */] },
             { title: 'Artistas', component: __WEBPACK_IMPORTED_MODULE_6__pages_artists_artists__["a" /* ArtistsPage */] },
-            { title: 'test item', component: __WEBPACK_IMPORTED_MODULE_7__pages_list_list__["a" /* ListPage */] }
+            { title: 'Musicas', component: __WEBPACK_IMPORTED_MODULE_7__pages_list_list__["a" /* ListPage */] }
         ];
         // get tracks api
         this.http.get('http://radioblackbrasil.com/api/tracks/random/').map(function (res) { return res.json(); }).subscribe(function (data) {
             playerService.smTrackList = data.tracks;
             _this.play('firstCall');
         }, function (error) { console.warn(';( error calling tracks service'); });
-    } // constructor
+    }
     app.prototype.ngOnInit = function () {
         var _this = this;
         this.subscription = this.playerService.smWaiting$.subscribe(function (item) {
             _this.isWaiting = item;
             _this.actualTrack = _this.playerService.getTrackInfo();
+        });
+        this.subscription = this.playerService.smPlaying$.subscribe(function (item) {
+            _this.isPlaying = item;
         });
     };
     app.prototype.ngOnDestroy = function () {
@@ -581,21 +623,17 @@ var app = (function () {
     return app;
 }());
 __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_13" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["e" /* Nav */]),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["e" /* Nav */])
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_13" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* Nav */]),
+    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* Nav */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* Nav */]) === "function" && _a || Object)
 ], app.prototype, "nav", void 0);
 app = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"C:\Repos\radio-black-brasil\src\app\app.html"*/'<ion-menu [content]="content">\n\n   <ion-header>\n\n      <ion-toolbar>\n\n      <ion-title>Menu</ion-title>\n\n      </ion-toolbar>\n\n   </ion-header>\n\n   <ion-content>\n\n      <ion-list>\n\n      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">\n\n         {{p.title}}\n\n      </button>\n\n      </ion-list>\n\n   </ion-content>\n\n</ion-menu>\n\n\n\n<!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>\n\n\n\n<ion-footer>\n\n   <ion-toolbar>\n\n      <ion-grid>\n\n      <ion-row id="progress"></ion-row>\n\n      <ion-row justify-content-between>\n\n         <!-- prev -->\n\n         <ion-col *ngIf="playerMode === \'controls\'" col-5 class="txt-center">\n\n            <a (click)="play(\'prev\')">\n\n               <i class="fa fa-angle-left fa-4x"></i>\n\n            </a>\n\n         </ion-col>\n\n         <!-- play / pause -->\n\n         <ion-col col-2 class="txt-center" [hidden]="!isWaiting">\n\n            <a><i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i></a>\n\n         </ion-col>\n\n         <ion-col col-2 class="txt-center" [hidden]="isWaiting">\n\n            <a (click)="play(\'self\')">\n\n               <i class="fa fa-{{ isPlaying ? \'pause\' : \'play\' }}-circle fa-4x"></i>\n\n            </a>\n\n         </ion-col>\n\n         <!-- Track info -->\n\n         <ion-col *ngIf="playerMode === \'info\'" col-10>\n\n            <a *ngIf="actualTrack" (click)="presentActionSheet()" class="f-right"><i class="fa fa-angle-up fa-2x"></i></a>\n\n            <p class="txt-bold txt-no-break">{{ actualTrack ? actualTrack.artist : \'\' }}</p>\n\n            <p class="txt-no-break">{{ actualTrack ? actualTrack.title : \'\' }}</p>\n\n         </ion-col>\n\n         <!-- next -->\n\n         <ion-col *ngIf="playerMode === \'controls\'" col-5 class="txt-center">\n\n            <a (click)="play(\'next\')">\n\n               <i class="fa fa-angle-right fa-4x"></i>\n\n            </a>\n\n         </ion-col>\n\n      </ion-row>\n\n      </ion-grid>\n\n   </ion-toolbar>\n\n</ion-footer>'/*ion-inline-end:"C:\Repos\radio-black-brasil\src\app\app.html"*/,
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/Users/marlenejej/Documents/Felipe/radio-black-brasil/radio-black-brasil/src/app/app.html"*/'<ion-menu [content]="content">\n   <ion-header>\n      <ion-toolbar>\n      <ion-title>Menu</ion-title>\n      </ion-toolbar>\n   </ion-header>\n   <ion-content>\n      <ion-list>\n      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">\n         {{p.title}}\n      </button>\n      </ion-list>\n   </ion-content>\n</ion-menu>\n\n<!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>\n\n<ion-footer>\n   <ion-toolbar>\n      <ion-grid>\n      <ion-row id="progress"></ion-row>\n      <ion-row justify-content-between>\n         <!-- prev -->\n         <ion-col *ngIf="playerMode === \'controls\'" col-5 class="txt-center">\n            <a (click)="play(\'prev\')">\n               <i class="fa fa-angle-left fa-4x"></i>\n            </a>\n         </ion-col>\n         <!-- play / pause -->\n         <ion-col col-2 class="txt-center" [hidden]="!isWaiting">\n            <a><i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i></a>\n         </ion-col>\n         <ion-col col-2 class="txt-center" [hidden]="isWaiting">\n            <a (click)="play(\'self\')">\n               <i class="fa fa-{{ isPlaying ? \'pause\' : \'play\' }}-circle fa-4x"></i>\n            </a>\n         </ion-col>\n         <!-- Track info -->\n         <ion-col *ngIf="playerMode === \'info\'" col-10>\n            <a *ngIf="actualTrack" (click)="presentActionSheet()" class="f-right"><i class="fa fa-angle-up fa-2x"></i></a>\n            <p class="txt-bold txt-no-break">{{ actualTrack ? actualTrack.artist : \'\' }}</p>\n            <p class="txt-no-break">{{ actualTrack ? actualTrack.title : \'\' }}</p>\n         </ion-col>\n         <!-- next -->\n         <ion-col *ngIf="playerMode === \'controls\'" col-5 class="txt-center">\n            <a (click)="play(\'next\')">\n               <i class="fa fa-angle-right fa-4x"></i>\n            </a>\n         </ion-col>\n      </ion-row>\n      </ion-grid>\n   </ion-toolbar>\n</ion-footer>'/*ion-inline-end:"/Users/marlenejej/Documents/Felipe/radio-black-brasil/radio-black-brasil/src/app/app.html"*/,
         providers: [__WEBPACK_IMPORTED_MODULE_9__player_service__["a" /* PlayerService */]]
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_9__player_service__["a" /* PlayerService */],
-        __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["h" /* Platform */],
-        __WEBPACK_IMPORTED_MODULE_3__ionic_native_status_bar__["a" /* StatusBar */],
-        __WEBPACK_IMPORTED_MODULE_4__ionic_native_splash_screen__["a" /* SplashScreen */],
-        __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */],
-        __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["a" /* ActionSheetController */]])
+    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_9__player_service__["a" /* PlayerService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_9__player_service__["a" /* PlayerService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["i" /* Platform */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["i" /* Platform */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__ionic_native_status_bar__["a" /* StatusBar */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ionic_native_status_bar__["a" /* StatusBar */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4__ionic_native_splash_screen__["a" /* SplashScreen */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__ionic_native_splash_screen__["a" /* SplashScreen */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["a" /* ActionSheetController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["a" /* ActionSheetController */]) === "function" && _g || Object])
 ], app);
 
+var _a, _b, _c, _d, _e, _f, _g;
 //# sourceMappingURL=app.component.js.map
 
 /***/ })
